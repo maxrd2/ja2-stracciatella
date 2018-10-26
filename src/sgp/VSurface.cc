@@ -9,6 +9,9 @@
 #include "Video.h"
 #include "SGP.h"
 #include "Logger.h"
+#include "Local.h"
+#include "VideoScale.h"
+#include "UILayout.h"
 
 extern SGPVSurface* gpVSurfaceHead;
 
@@ -206,7 +209,8 @@ SGPVSurfaceAuto* AddVideoSurface(UINT16 Width, UINT16 Height, UINT8 BitDepth)
 
 SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* const Filename)
 {
-	AutoSGPImage img(CreateImage(Filename, IMAGE_ALLIMAGEDATA));
+	AutoSGPImage imgOrig(CreateImage(Filename, IMAGE_ALLIMAGEDATA));
+	AutoSGPImage img(ScaleImage(imgOrig, g_ui.m_stdScreenScale));
 
 	SGPVSurfaceAuto* const vs = new SGPVSurfaceAuto(img->usWidth, img->usHeight, img->ubBitDepth);
 

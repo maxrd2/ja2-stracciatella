@@ -4,6 +4,10 @@
 #include "VObject.h"
 #include "VObject_Blitters.h"
 #include "VSurface.h"
+#include "VideoScale.h"
+#include "Local.h"
+
+#include "UILayout.h"
 
 #include <algorithm>
 #include <iterator>
@@ -259,7 +263,7 @@ void ShutdownVideoObjectManager(void)
 #ifdef SGP_VIDEO_DEBUGGING
 static
 #endif
-SGPVObject* AddStandardVideoObjectFromHImage(SGPImage* const img)
+SGPVObject* AddStandardVideoObjectFromHImage(SGPImage *img)
 {
 	return new SGPVObject(img);
 }
@@ -268,12 +272,31 @@ SGPVObject* AddStandardVideoObjectFromHImage(SGPImage* const img)
 #ifdef SGP_VIDEO_DEBUGGING
 static
 #endif
-SGPVObject* AddStandardVideoObjectFromFile(const char* const ImageFile)
+SGPVObject* AddStandardVideoObjectFromFile(const char *ImageFile)
 {
-	AutoSGPImage hImage(CreateImage(ImageFile, IMAGE_ALLIMAGEDATA));
+	return AddScaledVideoObjectFromFile(ImageFile);
+}
+
+SGPVObject* AddScaledVideoObjectFromFile(const char *ImageFile)
+{
+	AutoSGPImage img(CreateImage(ImageFile, IMAGE_ALLIMAGEDATA));
+	AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale));
 	return AddStandardVideoObjectFromHImage(hImage);
 }
 
+SGPVObject* AddScaledOutlineVideoObjectFromFile(const char *ImageFile)
+{
+	AutoSGPImage img(CreateImage(ImageFile, IMAGE_ALLIMAGEDATA | IMAGE_REMOVE_PAL254));
+	AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale));
+	return AddStandardVideoObjectFromHImage(hImage);
+}
+
+SGPVObject* AddScaledAlphaVideoObjectFromFile(const char *ImageFile)
+{
+	AutoSGPImage img(CreateImage(ImageFile, IMAGE_ALLIMAGEDATA | IMAGE_REMOVE_PAL1));
+	AutoSGPImage hImage(ScaleAlphaImage(img, g_ui.m_stdScreenScale));
+	return AddStandardVideoObjectFromHImage(hImage);
+}
 
 void BltVideoObject(SGPVSurface* const dst, SGPVObject const* const src, UINT16 const usRegionIndex, INT32 const iDestX, INT32 const iDestY)
 {
@@ -331,7 +354,8 @@ void BltVideoObjectOutlineShadow(SGPVSurface* const dst, const SGPVObject* const
 
 void BltVideoObjectOnce(SGPVSurface* const dst, char const* const filename, UINT16 const region, INT32 const x, INT32 const y)
 {
-	AutoSGPVObject vo(AddVideoObjectFromFile(filename));
+	Assert(dst->BPP() == 32);
+	AutoSGPVObject vo(AddScaledVideoObjectFromFile(filename));
 	BltVideoObject(dst, vo, region, x, y);
 }
 

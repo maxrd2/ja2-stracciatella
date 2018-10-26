@@ -12,6 +12,8 @@
 #include "WorldDef.h"
 #include "FileMan.h"
 #include "MemMan.h"
+#include "UILayout.h"
+#include "VideoScale.h"
 
 #include "ContentManager.h"
 #include "GameInstance.h"
@@ -658,7 +660,8 @@ void LoadAnimationSurface(UINT16 const usSoldierID, UINT16 const usSurfaceIndex,
 			// Load into memory
 			SLOGD("Surface Database: Loading %d", usSurfaceIndex);
 
-			AutoSGPImage   hImage(CreateImage(a->Filename, IMAGE_ALLDATA));
+			AutoSGPImage img(CreateImage(a->Filename, IMAGE_ALLDATA | IMAGE_HACK254));
+			AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale));
 			AutoSGPVObject hVObject(AddVideoObjectFromHImage(hImage));
 
 			// Get aux data
