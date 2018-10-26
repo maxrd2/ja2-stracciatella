@@ -108,8 +108,11 @@ extern UINT32 guiVObjectSize;
 	#define AddVideoObjectFromHImage(a) AddAndRecordVObjectFromHImage(a, __LINE__, __FILE__)
 	#define AddVideoObjectFromFile(a)   AddAndRecordVObjectFromFile(  a, __LINE__, __FILE__)
 #else
-	SGPVObject* AddStandardVideoObjectFromHImage(SGPImage*);
-	SGPVObject* AddStandardVideoObjectFromFile(const char* ImageFile);
+	SGPVObject* AddStandardVideoObjectFromHImage(SGPImage *img);
+	SGPVObject* AddStandardVideoObjectFromFile(const char *ImageFile);
+	SGPVObject* AddScaledVideoObjectFromFile(const char *ImageFile);
+	SGPVObject* AddScaledOutlineVideoObjectFromFile(const char *ImageFile);
+	SGPVObject* AddScaledAlphaVideoObjectFromFile(const char *ImageFile);
 	#define AddVideoObjectFromHImage(a) AddStandardVideoObjectFromHImage(a)
 	#define AddVideoObjectFromFile(a)   AddStandardVideoObjectFromFile(a)
 #endif

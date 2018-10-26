@@ -5414,10 +5414,10 @@ void LoadInterfaceItemsGraphics()
 {
 	guiMapInvSecondHandBlockout = AddVideoObjectFromFile(INTERFACEDIR "/map_inv_2nd_gun_cover.sti");
 	guiSecItemHiddenVO          = AddVideoObjectFromFile(INTERFACEDIR "/secondary_gun_hidden.sti");
-	guiGUNSM                    = AddVideoObjectFromFile(INTERFACEDIR "/mdguns.sti");    // interface gun pictures
-	guiP1ITEMS                  = AddVideoObjectFromFile(INTERFACEDIR "/mdp1items.sti"); // interface item pictures
-	guiP2ITEMS                  = AddVideoObjectFromFile(INTERFACEDIR "/mdp2items.sti"); // interface item pictures
-	guiP3ITEMS                  = AddVideoObjectFromFile(INTERFACEDIR "/mdp3items.sti"); // interface item pictures
+	guiGUNSM                    = AddScaledOutlineVideoObjectFromFile(INTERFACEDIR "/mdguns.sti");    // interface gun pictures
+	guiP1ITEMS                  = AddScaledOutlineVideoObjectFromFile(INTERFACEDIR "/mdp1items.sti"); // interface item pictures
+	guiP2ITEMS                  = AddScaledOutlineVideoObjectFromFile(INTERFACEDIR "/mdp2items.sti"); // interface item pictures
+	guiP3ITEMS                  = AddScaledOutlineVideoObjectFromFile(INTERFACEDIR "/mdp3items.sti"); // interface item pictures
 
 	// Build a sawtooth black-white-black color gradient
 	size_t const length = lengthof(usItemCyclePlacedItemColors);

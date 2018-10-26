@@ -19,6 +19,8 @@
 
 #include "ContentManager.h"
 #include "GameInstance.h"
+#include "VideoScale.h"
+#include "UILayout.h"
 
 #include "slog/slog.h"
 
@@ -29,7 +31,8 @@ TILE_IMAGERY* LoadTileSurface(const char* cFilename)
 try
 {
 	// Add tile surface
-	AutoSGPImage   hImage(CreateImage(cFilename, IMAGE_ALLDATA));
+	AutoSGPImage img(CreateImage(cFilename, IMAGE_ALLDATA | IMAGE_HACK254));
+	AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale));
 	AutoSGPVObject hVObject(AddVideoObjectFromHImage(hImage));
 
 	// Load structure data, if any.
