@@ -276,19 +276,17 @@ void SmackToBuffer(Smack* Smk, UINT32 Left, UINT32 Top, UINT32 Pitch, UINT32 Des
 			buf+=halfpitch-DestWidth;
 		}
 	}
-	else // SMACKBUFFER555
+	else // RGBA
 	{
-		for (i =0; i < DestHeight ; i++)
-		{
-			for (j = 0; j < DestWidth; j++)
-			{
-				// get rgb offset of palette
-				rgb = &smackpal[pframe[0]*3] ;
-				// convert from rbg to rgb555 0=red 1=green 2=blue
-				pixel = (rgb[0]>>3)<<10 | (rgb[1]>>2)<<5 | rgb[2]>>3;
-				buf[(j+Top)+(i+Left)*halfpitch] = pixel;
+		UINT32 *wbuf = reinterpret_cast<UINT32 *>(Buf);
+		wbuf += (Pitch >> 2) * Top + Left;
+		for(i = 0; i < DestHeight; i++) {
+			for(j = 0; j < DestWidth; j++) {
+				rgb = &smackpal[pframe[0] * 3];
+				*wbuf++ = UINT32(rgb[0]) << 24 | UINT32(rgb[1]) << 16 | UINT32(rgb[2]) << 8 | 0xFF;
 				pframe++;
 			}
+			wbuf += (Pitch >> 2) - DestWidth;
 		}
 	}
 }

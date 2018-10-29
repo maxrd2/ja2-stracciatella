@@ -114,8 +114,8 @@ SMKFLIC* SmkPlayFlic(const char* const filename, const UINT32 left, const UINT32
 	if (sf == NULL) return NULL;
 
 	// Set the blitting position on the screen
-	sf->uiLeft = left;
-	sf->uiTop  = top;
+	sf->uiLeft = left + (g_ui.m_scaledInterfaceWidth - sf->SmackerObject->Width) / 2;
+	sf->uiTop  = top + (g_ui.m_scaledInterfaceHeight - sf->SmackerObject->Height) / 2;
 
 	// We're now playing, flag the flic for the poller to update
 	sf->uiFlags |= SMK_FLIC_PLAYING;
