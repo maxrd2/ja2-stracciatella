@@ -467,7 +467,9 @@ static void AddStringToMapScreenMessageList(const wchar_t* pString, UINT32 usCol
 
 void DisplayStringsInMapScreenMessageList(void)
 {
-	SetFontDestBuffer(FRAME_BUFFER, STD_SCREEN_X + 17, STD_SCREEN_Y + 360 + 6, STD_SCREEN_X + 407, STD_SCREEN_Y + 360 + 101);
+	SetFontDestBuffer(FRAME_BUFFER,
+		STD_SCREEN_X + g_ui.m_stdScreenScale * 17, STD_SCREEN_Y + g_ui.m_stdScreenScale * (360 + 6),
+		STD_SCREEN_X + g_ui.m_stdScreenScale * 407, STD_SCREEN_Y + g_ui.m_stdScreenScale * (360 + 101));
 
 	SetFont(MAP_SCREEN_MESSAGE_FONT);
 	SetFontBackground(FONT_MCOLOR_BLACK);
@@ -475,7 +477,7 @@ void DisplayStringsInMapScreenMessageList(void)
 
 	UINT8 ubCurrentStringIndex = gubCurrentMapMessageString;
 
-	INT16 sY = STD_SCREEN_Y + 377;
+	INT16 sY = STD_SCREEN_Y + g_ui.m_stdScreenScale * 377;
 	UINT16 usSpacing = GetFontHeight(MAP_SCREEN_MESSAGE_FONT);
 
 	for (UINT8 ubLinesPrinted = 0; ubLinesPrinted < MAX_MESSAGES_ON_MAP_BOTTOM; ubLinesPrinted++)
@@ -490,7 +492,7 @@ void DisplayStringsInMapScreenMessageList(void)
 		if (s == NULL) break;
 
 		SetFontForeground(s->usColor);
-		MPrint(STD_SCREEN_X + 20, sY, s->pString);
+		MPrint(STD_SCREEN_X + g_ui.m_stdScreenScale * 20, sY, s->pString);
 
 		sY += usSpacing;
 

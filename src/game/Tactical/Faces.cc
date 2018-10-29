@@ -302,18 +302,18 @@ static void GetFaceRelativeCoordinates(FACETYPE const& f, UINT16* const pusEyesX
 		FOR_EACH(RPC_SMALL_FACE_VALUES const, i, gRPCSmallFaceValues)
 		{
 			if (i->profile != pid) continue;
-			*pusEyesX  = i->bEyesX;
-			*pusEyesY  = i->bEyesY;
-			*pusMouthX = i->bMouthX;
-			*pusMouthY = i->bMouthY;
+			*pusEyesX  = g_ui.m_stdScreenScale * i->bEyesX;
+			*pusEyesY  = g_ui.m_stdScreenScale * i->bEyesY;
+			*pusMouthX = g_ui.m_stdScreenScale * i->bMouthX;
+			*pusMouthY = g_ui.m_stdScreenScale * i->bMouthY;
 			return;
 		}
 	}
 
-	*pusEyesX  = p.usEyesX;
-	*pusEyesY  = p.usEyesY;
-	*pusMouthX = p.usMouthX;
-	*pusMouthY = p.usMouthY;
+	*pusEyesX  = g_ui.m_stdScreenScale * p.usEyesX;
+	*pusEyesY  = g_ui.m_stdScreenScale * p.usEyesY;
+	*pusMouthX = g_ui.m_stdScreenScale * p.usMouthX;
+	*pusMouthY = g_ui.m_stdScreenScale * p.usMouthY;
 }
 
 
