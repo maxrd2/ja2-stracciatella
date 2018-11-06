@@ -30,14 +30,14 @@
 #include <string_theory/format>
 
 
-#define MSGBOX_DEFAULT_WIDTH      300
+#define MSGBOX_DEFAULT_WIDTH      (g_ui.m_stdScreenScale * 300)
 
-#define MSGBOX_BUTTON_WIDTH        61
-#define MSGBOX_BUTTON_HEIGHT       20
-#define MSGBOX_BUTTON_X_SEP        15
+#define MSGBOX_BUTTON_WIDTH        (g_ui.m_stdScreenScale * 61)
+#define MSGBOX_BUTTON_HEIGHT       (g_ui.m_stdScreenScale * 20)
+#define MSGBOX_BUTTON_X_SEP        (g_ui.m_stdScreenScale * 15)
 
-#define MSGBOX_SMALL_BUTTON_WIDTH  31
-#define MSGBOX_SMALL_BUTTON_X_SEP   8
+#define MSGBOX_SMALL_BUTTON_WIDTH  (g_ui.m_stdScreenScale * 31)
+#define MSGBOX_SMALL_BUTTON_X_SEP   (g_ui.m_stdScreenScale * 8)
 
 // old mouse x and y positions
 static SGPPoint pOldMousePosition;
@@ -130,7 +130,9 @@ void DoMessageBox(MessageBoxStyleID const ubStyle, wchar_t const* const zString,
 	// Init message box
 	UINT16 usTextBoxWidth;
 	UINT16 usTextBoxHeight;
-	gMsgBox.box = PrepareMercPopupBox(0, style.background, style.border, zString, MSGBOX_DEFAULT_WIDTH, 40, 10, 30, &usTextBoxWidth, &usTextBoxHeight);
+	gMsgBox.box = PrepareMercPopupBox(0, style.background, style.border, zString,
+		MSGBOX_DEFAULT_WIDTH, g_ui.m_stdScreenScale * 40, g_ui.m_stdScreenScale * 10, g_ui.m_stdScreenScale * 30,
+		&usTextBoxWidth, &usTextBoxHeight);
 
 	// Save height,width
 	gMsgBox.usWidth  = usTextBoxWidth;
@@ -180,8 +182,8 @@ void DoMessageBox(MessageBoxStyleID const ubStyle, wchar_t const* const zString,
 		UINT32 y = gMsgBox.uY + usTextBoxHeight - 4;
 		if (usFlags == MSG_BOX_FLAG_OK)
 		{
-			x += 27;
-			y -=  6;
+			x += g_ui.m_stdScreenScale * 27;
+			y -= g_ui.m_stdScreenScale *  6;
 		}
 		SimulateMouseMovement(x, y);
 	}
