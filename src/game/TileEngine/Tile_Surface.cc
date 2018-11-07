@@ -27,7 +27,7 @@
 TILE_IMAGERY				*gTileSurfaceArray[ NUMBEROFTILETYPES ];
 
 
-TILE_IMAGERY* LoadTileSurface(const char* cFilename)
+TILE_IMAGERY* LoadTileSurface(const char* cFilename, int type)
 try
 {
 	// Add tile surface
@@ -74,6 +74,15 @@ try
 
 	pTileSurf->vo                = hVObject.Release();
 	pTileSurf->pStructureFileRef = pStructureFileRef.Release();
+	if(type == GUNS || type == P1ITEMS || type == P2ITEMS) {
+		// TODO: original game is using tile graphics to render items
+		//       in pickup menu and that looks ugly - we could switch
+		//       to inventory icons, but they need to get scaled down
+		AutoSGPImage hIntImage(ScaleImage(img, g_ui.m_stdScreenScale));
+		pTileSurf->voInterface = AddVideoObjectFromHImage(hIntImage);
+	} else {
+		pTileSurf->voInterface = nullptr;
+	}
 	return pTileSurf.Release();
 }
 catch (...)
@@ -101,6 +110,8 @@ void DeleteTileSurface(TILE_IMAGERY* const pTileSurf)
 	}
 
 	DeleteVideoObject(pTileSurf->vo);
+	if(pTileSurf->voInterface)
+		DeleteVideoObject(pTileSurf->voInterface);
 	MemFree( pTileSurf );
 }
 

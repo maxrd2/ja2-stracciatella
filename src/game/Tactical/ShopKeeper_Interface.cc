@@ -2018,7 +2018,7 @@ static UINT32 DisplayInvSlot(UINT8 const slot_num, UINT16 const item_idx, UINT16
 		INT16              cen_y   = y +     ABS(SKI_INV_HEIGHT    - e.usHeight) / 2 - e.sOffsetY;
 		if (gamepolicy(f_draw_item_shadow))
 		{
-			BltVideoObjectOutlineShadow(FRAME_BUFFER, &item_vo, item->getGraphicNum(), cen_x - 2, cen_y + 2);
+			BltVideoObjectOutlineShadow(FRAME_BUFFER, &item_vo, item->getGraphicNum(), cen_x - g_ui.m_stdScreenScale * 2, cen_y + g_ui.m_stdScreenScale * 2);
 		}
 		BltVideoObjectOutline(      FRAME_BUFFER, &item_vo, item->getGraphicNum(), cen_x,     cen_y, outline);	}
 

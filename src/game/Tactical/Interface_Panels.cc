@@ -851,8 +851,10 @@ static void FillEmptySpaceAtBottom()
 {
 	if(g_ui.isBigScreen())
 	{
-		ColorFillVideoSurfaceArea(guiSAVEBUFFER, 640, g_ui.get_INV_INTERFACE_START_Y(),
-						g_ui.m_screenWidth, g_ui.m_screenHeight, 0);
+		ColorFillVideoSurfaceArea(guiSAVEBUFFER,
+					  640, g_ui.get_INV_INTERFACE_START_Y(),
+					  g_ui.m_screenWidth, g_ui.m_screenHeight,
+					  RGB(0, 0, 0));
 	}
 }
 
@@ -1162,7 +1164,8 @@ static void PrintStat(UINT32 const change_time, UINT16 const stat_bit, INT8 cons
 	wchar_t str[4];
 	swprintf(str, lengthof(str), L"%3d", stat_val);
 	if (gamepolicy(gui_extras))
-		ProgressBarBackgroundRect(x+16, y-2, 15*progress/100, 10, RGB(0x51, 0x4A, 0x05), progress);
+		ProgressBarBackgroundRect(x + g_ui.m_stdScreenScale * 16, y - g_ui.m_stdScreenScale * 2,
+			g_ui.m_stdScreenScale * 15 * progress / 100, g_ui.m_stdScreenScale * 10, RGB(0x51, 0x4A, 0x05), progress);
 	DrawStringRight(str, x, y, SM_STATS_WIDTH, SM_STATS_HEIGHT, BLOCKFONT2);
 }
 
@@ -1237,9 +1240,9 @@ no_plate:
 			SetFontAttributes(BLOCKFONT2, STATS_TITLE_FONT_COLOR);
 			for (UINT32 i = 0; i != 5; ++i)
 			{
-				INT32 const y = dy + 7 + i * 10;
-				MPrint( 92, y, pShortAttributeStrings[i]);
-				MPrint(137, y, pShortAttributeStrings[i + 5]);
+				INT32 const y = dy + g_ui.m_stdScreenScale * 7 + i * g_ui.m_stdScreenScale * 10;
+				MPrint(g_ui.m_stdScreenScale *  92, y, pShortAttributeStrings[i]);
+				MPrint(g_ui.m_stdScreenScale * 137, y, pShortAttributeStrings[i + 5]);
 			}
 
 			MPrint(SM_ARMOR_LABEL_X - StringPixLength(pInvPanelTitleStrings[0], BLOCKFONT2) / 2, dy + SM_ARMOR_LABEL_Y, pInvPanelTitleStrings[0]);
@@ -1324,8 +1327,8 @@ no_plate:
 	if (gfSMDisableForItems && *dirty_level != DIRTYLEVEL0)
 	{
 		SGPRect ClipRect;
-		ClipRect.iLeft = 87;
-		ClipRect.iRight = 536;
+		ClipRect.iLeft = g_ui.m_stdScreenScale * 87;
+		ClipRect.iRight = g_ui.m_stdScreenScale * 536;
 		ClipRect.iTop = INV_INTERFACE_START_Y;
 		ClipRect.iBottom = SCREEN_HEIGHT;
 		SGPVSurface::Lock l(FRAME_BUFFER);
@@ -3157,8 +3160,10 @@ void RenderTownIDString(void)
 	// Render town, position
 	SetFontAttributes(COMPFONT, RGB(  0, 255,   0));
 	GetSectorIDString( gWorldSectorX, gWorldSectorY, gbWorldSectorZ, zTownIDString, lengthof(zTownIDString), TRUE );
-	ReduceStringLength( zTownIDString, lengthof(zTownIDString), 80, COMPFONT );
-	FindFontCenterCoordinates(548, SCREEN_HEIGHT - 55, 80, 16, zTownIDString, COMPFONT, &sFontX, &sFontY);
+	ReduceStringLength( zTownIDString, lengthof(zTownIDString), g_ui.m_stdScreenScale * 80, COMPFONT );
+	FindFontCenterCoordinates(g_ui.m_stdScreenScale * 548, SCREEN_HEIGHT - g_ui.m_stdScreenScale * 55,
+		g_ui.m_stdScreenScale * 80, g_ui.m_stdScreenScale * 16,
+		zTownIDString, COMPFONT, &sFontX, &sFontY);
 	MPrint(sFontX, sFontY, zTownIDString);
 }
 
@@ -3280,8 +3285,8 @@ void KeyRingItemPanelButtonCallback(MOUSE_REGION* pRegion, INT32 iReason)
 		if (pSoldier == NULL) return;
 
 		sStartYPosition = MAP_START_KEYRING_Y;
-		sWidth = 261;
-		sHeight = ( 359 - 107 );
+		sWidth = g_ui.m_stdScreenScale * 261;
+		sHeight = g_ui.m_stdScreenScale * (359 - 107);
 	}
 	else
 	{
@@ -3304,9 +3309,10 @@ void KeyRingItemPanelButtonCallback(MOUSE_REGION* pRegion, INT32 iReason)
 		if( guiCurrentScreen == MAP_SCREEN )
 		{
 			// shade the background
-			FRAME_BUFFER->ShadowRect(STD_SCREEN_X + 0, STD_SCREEN_Y + 107,
-							STD_SCREEN_X + 261, STD_SCREEN_Y + 359);
-			InvalidateRegion(STD_SCREEN_X + 0, STD_SCREEN_Y + 107, STD_SCREEN_X + 261, STD_SCREEN_Y + 359);
+			FRAME_BUFFER->ShadowRect(STD_SCREEN_X + g_ui.m_stdScreenScale * 0, STD_SCREEN_Y + g_ui.m_stdScreenScale * 107,
+				STD_SCREEN_X + g_ui.m_stdScreenScale * 261, STD_SCREEN_Y + g_ui.m_stdScreenScale * 359);
+			InvalidateRegion(STD_SCREEN_X + g_ui.m_stdScreenScale * 0, STD_SCREEN_Y + g_ui.m_stdScreenScale * 107,
+				STD_SCREEN_X + g_ui.m_stdScreenScale * 261, STD_SCREEN_Y + g_ui.m_stdScreenScale * 359);
 			InitKeyRingPopup(pSoldier, STD_SCREEN_X + 0, sStartYPosition, sWidth, sHeight);
 		}
 		else

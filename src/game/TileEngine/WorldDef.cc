@@ -250,7 +250,7 @@ static void AddTileSurface(char const* const filename, UINT32 const type, TileSe
 		slot = 0;
 	}
 
-	TILE_IMAGERY* const t = LoadTileSurface(filename);
+	TILE_IMAGERY* const t = LoadTileSurface(filename, type);
 	t->fType = type;
 	SetRaisedObjectFlag(filename, t);
 
