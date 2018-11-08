@@ -30,9 +30,13 @@ TILE_IMAGERY				*gTileSurfaceArray[ NUMBEROFTILETYPES ];
 TILE_IMAGERY* LoadTileSurface(const char* cFilename, int type)
 try
 {
-	// Add tile surface
+	const bool isContinuousTile = (type >= FIRSTTEXTURE && type <= DEEPWATERTEXTURE)
+			|| (type >= FIRSTSHADOW && type <= FOURTHFULLSHADOW)
+			|| (type >= FIRSTCLIFFHANG && type <= FIRSTCLIFFSHADOW)
+			|| (type >= FIRSTVEHICLE && type <= SECONDVEHICLESHADOW)
+			|| type == ROADPIECES;
 	AutoSGPImage img(CreateImage(cFilename, IMAGE_ALLDATA | IMAGE_HACK254));
-	AutoSGPImage hImage(ScaleImage(img, g_ui.m_tacticalScreenScale));
+	AutoSGPImage hImage(ScaleImage(img, g_ui.m_tacticalScreenScale, !isContinuousTile));
 	AutoSGPVObject hVObject(AddVideoObjectFromHImage(hImage));
 
 	// Load structure data, if any.

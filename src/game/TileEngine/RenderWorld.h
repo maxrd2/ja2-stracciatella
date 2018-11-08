@@ -1,6 +1,9 @@
 #ifndef RENDERWORLD_H
 #define RENDERWORLD_H
 
+#include "UILayout.h"
+
+
 extern BOOLEAN gfDoVideoScroll;
 extern UINT8   gubCurScrollSpeedID;
 
@@ -35,7 +38,7 @@ ENUM_BITSET(RenderFlags)
 #define TOPMOST_Z_LEVEL 32767
 
 /* number of pixels to show the exit sector cursor at the edge of the map */
-#define NO_PX_SHOW_EXIT_CURS			15
+#define NO_PX_SHOW_EXIT_CURS			(g_ui.m_tacticalScreenScale * 15)
 
 enum RenderLayerFlags
 {
