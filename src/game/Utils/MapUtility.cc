@@ -56,7 +56,7 @@ ScreenID MapUtilScreenHandle()
 	UINT32 uiRGBColor;
 
 	UINT32 bR, bG, bB, bAvR, bAvG, bAvB;
-	INT16 s16BPPSrc, sDest16BPPColor;
+	UINT32 s16BPPSrc, sDest16BPPColor;
 
 	INT16 sX1, sX2, sY1, sY2, sTop, sBottom, sLeft, sRight;
 
@@ -69,7 +69,7 @@ ScreenID MapUtilScreenHandle()
 	sDest16BPPColor = -1;
 	bAvR = bAvG = bAvB = 0;
 
-	FRAME_BUFFER->Fill(Get16BPPColor(FROMRGB(0, 0, 0)));
+	FRAME_BUFFER->Fill(0x000000FF);
 
 	if ( fNewMap )
 	{
@@ -182,7 +182,8 @@ ScreenID MapUtilScreenHandle()
 						{
 							s16BPPSrc = pSrcBuf[ ( iWindowY * (uiSrcPitchBYTES/2) ) + iWindowX ];
 
-							uiRGBColor = GetRGBColor( s16BPPSrc );
+							// FIXME: maxrd2 - this had GetRGBColor
+							uiRGBColor = s16BPPSrc;
 
 							bR += SGPGetRValue( uiRGBColor );
 							bG += SGPGetGValue( uiRGBColor );
@@ -201,7 +202,7 @@ ScreenID MapUtilScreenHandle()
 					bAvG = bG / (UINT8)iCount;
 					bAvB = bB / (UINT8)iCount;
 
-					sDest16BPPColor = Get16BPPColor( FROMRGB( bAvR, bAvG, bAvB ) );
+					sDest16BPPColor = RGB(bAvR, bAvG, bAvB);
 				}
 
 				//Write into dest!
@@ -242,13 +243,13 @@ ScreenID MapUtilScreenHandle()
 			{
 				INT32 cnt;
 				INT32 sX = 0, sY = 420;
-				UINT16 usLineColor;
+				UINT32 usLineColor;
 
 				SetClippingRegionAndImageWidth(uiDestPitchBYTES, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				for ( cnt = 0; cnt < 256; cnt++ )
 				{
-					usLineColor = Get16BPPColor(FROMRGB(pPalette[cnt].r, pPalette[cnt].g, pPalette[cnt].b));
+					usLineColor = RGB(pPalette[cnt].r, pPalette[cnt].g, pPalette[cnt].b);
 					RectangleDraw(TRUE, sX, sY, sX, sY + 10, usLineColor, pDestBuf);
 					sX++;
 					RectangleDraw(TRUE, sX, sY, sX, sY + 10, usLineColor, pDestBuf);

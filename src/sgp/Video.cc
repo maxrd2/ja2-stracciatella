@@ -44,10 +44,10 @@
 
 #define MAX_NUM_FRAMES    25
 
-#define RED_MASK 0xF800
-#define GREEN_MASK 0x07E0
-#define BLUE_MASK 0x001F
-#define ALPHA_MASK 0
+#define RED_MASK 0xFF000000 // TODO: maxrd2 we don't need these
+#define GREEN_MASK 0x00FF0000
+#define BLUE_MASK 0x0000FF00
+#define ALPHA_MASK 0x000000FF
 
 
 static BOOLEAN gfVideoCapture = FALSE;
@@ -192,7 +192,7 @@ void InitializeVideoManager(const VideoScaleQuality quality)
 	}
 
 	ScreenTexture = SDL_CreateTexture(GameRenderer,
-					SDL_PIXELFORMAT_RGB565,
+					SDL_PIXELFORMAT_RGBA8888,
 					SDL_TEXTUREACCESS_STREAMING,
 					SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -205,7 +205,7 @@ void InitializeVideoManager(const VideoScaleQuality quality)
 
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 		ScaledScreenTexture = SDL_CreateTexture(GameRenderer,
-			SDL_PIXELFORMAT_RGB565,
+			SDL_PIXELFORMAT_RGBA8888,
 			SDL_TEXTUREACCESS_TARGET,
 			SCREEN_WIDTH * scale, SCREEN_HEIGHT * scale);
 
@@ -497,11 +497,11 @@ static void WriteTGAHeader(FILE* const f)
 {
 	/*
 	 *  0 byte ID length
-	 *  1 byte colour map type
+	 *  1 byte color map type
 	 *  2 byte targa type
-	 *  3 word colour map origin
-	 *  5 word colour map length
-	 *  7 byte colour map entry size
+	 *  3 word color map origin
+	 *  5 word color map length
+	 *  7 byte color map entry size
 	 *  8 word origin x
 	 * 10 word origin y
 	 * 12 word image width
@@ -572,7 +572,8 @@ static void TakeScreenshot()
 		if (buf)
 		{ // ATE: Fix this such that it converts pixel format to 5/5/5
 			memcpy(buf, src + y * SCREEN_WIDTH, SCREEN_WIDTH * sizeof(*buf));
-			ConvertRGBDistribution565To555(buf, SCREEN_WIDTH);
+			// FIXME: maxrd2 - this is probably screwed
+//			ConvertRGBDistribution565To555(buf, SCREEN_WIDTH);
 			fwrite(buf, sizeof(*buf), SCREEN_WIDTH, f);
 		}
 		else

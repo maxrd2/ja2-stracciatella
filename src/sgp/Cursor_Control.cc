@@ -31,7 +31,7 @@ static MOUSEBLT_HOOK gMouseBltOverride = NULL;
 
 static void EraseMouseCursor(void)
 {
-	MOUSE_BUFFER->Fill(0);
+	MOUSE_BUFFER->Fill(0x000000FF);
 }
 
 
@@ -47,7 +47,7 @@ static void BltToMouseCursorFromVObjectWithOutline(HVOBJECT hVObject, UINT16 usV
 	ETRLEObject const& pTrav = hVObject->SubregionProperties(usVideoObjectSubIndex);
 	INT16       const  sXPos = (gsCurMouseWidth  - pTrav.usWidth)  / 2 - pTrav.sOffsetX;
 	INT16       const  sYPos = (gsCurMouseHeight - pTrav.usHeight) / 2 - pTrav.sOffsetY;
-	BltVideoObjectOutline(MOUSE_BUFFER, hVObject, usVideoObjectSubIndex, sXPos, sYPos, Get16BPPColor(FROMRGB(0, 255, 0)));
+	BltVideoObjectOutline(MOUSE_BUFFER, hVObject, usVideoObjectSubIndex, sXPos, sYPos, RGB(0, 255, 0));
 }
 
 

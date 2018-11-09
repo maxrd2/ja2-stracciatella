@@ -768,7 +768,7 @@ void RenderAIMMembers()
 }
 
 
-void DrawNumeralsToScreen(INT32 iNumber, INT8 bWidth, UINT16 usLocX, UINT16 usLocY, SGPFont const font, UINT8 ubColor)
+void DrawNumeralsToScreen(INT32 iNumber, INT8 bWidth, UINT16 usLocX, UINT16 usLocY, SGPFont const font, UINT32 ubColor)
 {
 	wchar_t		sStr[10];
 	swprintf(sStr, lengthof(sStr), L"%d", iNumber);
@@ -776,7 +776,7 @@ void DrawNumeralsToScreen(INT32 iNumber, INT8 bWidth, UINT16 usLocX, UINT16 usLo
 }
 
 
-static void DrawMoneyToScreen(INT32 iNumber, INT8 bWidth, UINT16 usLocX, UINT16 usLocY, SGPFont const font, UINT8 ubColor)
+static void DrawMoneyToScreen(INT32 iNumber, INT8 bWidth, UINT16 usLocX, UINT16 usLocY, SGPFont const font, UINT32 ubColor)
 {
 	wchar_t		sStr[10];
 	SPrintMoney(sStr, iNumber);
@@ -911,8 +911,8 @@ static void DisplayMercsInventory(MERCPROFILESTRUCT const& p)
 		UINT16  const        ty        = AIM_MEMBER_WEAPON_NAME_Y;
 		UINT16  const        tw        = AIM_MEMBER_WEAPON_NAME_WIDTH;
 		SGPFont const        tf        = AIM_M_WEAPON_TEXT_FONT;
-		UINT8   const        tc        = AIM_M_WEAPON_TEXT_COLOR;
-		UINT8   const        tb        = FONT_MCOLOR_BLACK;
+		UINT32  const        tc        = AIM_M_WEAPON_TEXT_COLOR;
+		UINT32  const        tb        = FONT_MCOLOR_BLACK;
 		if (DisplayWrappedString(tx, ty, tw, 2, tf, tc, item_name, tb, CENTER_JUSTIFIED | DONT_DISPLAY_TEXT) / GetFontHeight(tf) == 1)
 		{
 			DisplayWrappedString(tx, ty + GetFontHeight(tf) / 2, tw, 2, tf, tc, item_name, tb, CENTER_JUSTIFIED);
@@ -1043,18 +1043,18 @@ catch (...) { /* XXX ignore */ }
 static void DisplayDots(UINT16 usNameX, UINT16 usNameY, UINT16 usStatX, const wchar_t* pString);
 
 
-static void DrawStatColoured(const UINT16 x, const UINT16 y, const wchar_t* const stat, const INT32 val, const UINT8 colour)
+static void DrawStatColored(const UINT16 x, const UINT16 y, const wchar_t* const stat, const INT32 val, const UINT32 color)
 {
 	DrawTextToScreen(stat, x, y, 0, AIM_M_FONT_STATIC_TEXT, AIM_M_COLOR_STATIC_TEXT, FONT_MCOLOR_BLACK, LEFT_JUSTIFIED);
 	DisplayDots(x, y, x + STAT_NAME_WIDTH, stat);
-	DrawNumeralsToScreen(val, 3, x + STAT_VALUE_DX, y, AIM_M_NUMBER_FONT, colour);
+	DrawNumeralsToScreen(val, 3, x + STAT_VALUE_DX, y, AIM_M_NUMBER_FONT, color);
 }
 
 
 static void DrawStat(const UINT16 x, const UINT16 y, const wchar_t* const stat, const INT32 val)
 {
-	const UINT8 colour = (val >= 80 ? HIGH_STAT_COLOR : (val >= 50 ? MED_STAT_COLOR : LOW_STAT_COLOR));
-	DrawStatColoured(x, y, stat, val, colour);
+	const UINT32 color = (val >= 80 ? HIGH_STAT_COLOR : (val >= 50 ? MED_STAT_COLOR : LOW_STAT_COLOR));
+	DrawStatColored(x, y, stat, val, color);
 }
 
 
@@ -1074,7 +1074,7 @@ static void DisplayMercStats(MERCPROFILESTRUCT const& p)
 
 	//Second column in stats box.  Exp.Level, Markmanship, mechanical, explosive, medical
 	const UINT16 x2 = STATS_SECOND_COL;
-	DrawStatColoured(x2, EXPLEVEL_Y,    str_stat_exp_level,    p.bExpLevel, FONT_MCOLOR_WHITE);
+	DrawStatColored(x2, EXPLEVEL_Y,    str_stat_exp_level,    p.bExpLevel, FONT_MCOLOR_WHITE);
 	DrawStat(        x2, MARKSMAN_Y,    str_stat_marksmanship, p.bMarksmanship);
 	DrawStat(        x2, MECHANAICAL_Y, str_stat_mechanical,   p.bMechanical  );
 	DrawStat(        x2, EXPLOSIVE_Y,   str_stat_explosive,    p.bExplosive   );
@@ -1360,8 +1360,8 @@ static void DrawButtonSelection(GUI_BUTTON const* const btn, bool const selected
 		x += AIM_SELECT_LIGHT_OFF_X;
 		y += AIM_SELECT_LIGHT_OFF_Y;
 	}
-	UINT32 const fill_colour = selected ? FROMRGB(0, 255, 0) : FROMRGB(0, 0, 0);
-	ColorFillVideoSurfaceArea(FRAME_BUFFER, x, y, x + 8, y + 8, Get16BPPColor(fill_colour));
+	UINT32 const fill_color = selected ? RGB(0, 255, 0) : RGB(0, 0, 0);
+	ColorFillVideoSurfaceArea(FRAME_BUFFER, x, y, x + 8, y + 8, fill_color);
 }
 
 
@@ -1465,11 +1465,11 @@ static void CreateAimPopUpBox(wchar_t const* const sString1, wchar_t const* cons
 
 	//Create the popup boxes button
 	guiPopUpImage = LoadButtonImage(LAPTOPDIR "/videoconfbuttons.sti", 2, 3);
-	INT16 const colour = AIM_POPUP_BOX_COLOR;
-	INT16 const shadow = AIM_M_VIDEO_NAME_SHADOWCOLOR;
-	INT16 const x      = usPosX + AIM_POPUP_BOX_BUTTON_OFFSET_X;
-	INT16 const y      = usPosY + AIM_POPUP_BOX_BUTTON_OFFSET_Y;
-	guiPopUpOkButton = CreateIconAndTextButton(guiPopUpImage, VideoConfercingText[AIM_MEMBER_OK], FONT14ARIAL, colour, shadow, colour, shadow, x, y, MSYS_PRIORITY_HIGH + 5, BtnPopUpOkButtonCallback);
+	UINT32 const color  = AIM_POPUP_BOX_COLOR;
+	UINT32 const shadow = AIM_M_VIDEO_NAME_SHADOWCOLOR;
+	INT16 const x       = usPosX + AIM_POPUP_BOX_BUTTON_OFFSET_X;
+	INT16 const y       = usPosY + AIM_POPUP_BOX_BUTTON_OFFSET_Y;
+	guiPopUpOkButton = CreateIconAndTextButton(guiPopUpImage, VideoConfercingText[AIM_MEMBER_OK], FONT14ARIAL, color, shadow, color, shadow, x, y, MSYS_PRIORITY_HIGH + 5, BtnPopUpOkButtonCallback);
 	guiPopUpOkButton->SetCursor(CURSOR_LAPTOP_SCREEN);
 	guiPopUpOkButton->SetUserData(ubData);
 
@@ -1942,7 +1942,7 @@ static BOOLEAN DisplayBlackBackground(UINT8 ubMaxNumOfLoops)
 		guiLastHandleMercTime = uiCurrentTime;
 	}
 	// Blit color to screen
-	ColorFillVideoSurfaceArea( FRAME_BUFFER, AIM_MEMBER_VIDEO_FACE_X, AIM_MEMBER_VIDEO_FACE_Y, AIM_MEMBER_VIDEO_FACE_X+AIM_MEMBER_VIDEO_FACE_WIDTH,	AIM_MEMBER_VIDEO_FACE_Y+AIM_MEMBER_VIDEO_FACE_HEIGHT, Get16BPPColor( FROMRGB( 0, 0, 0 ) ) );
+	ColorFillVideoSurfaceArea( FRAME_BUFFER, AIM_MEMBER_VIDEO_FACE_X, AIM_MEMBER_VIDEO_FACE_Y, AIM_MEMBER_VIDEO_FACE_X+AIM_MEMBER_VIDEO_FACE_WIDTH,	AIM_MEMBER_VIDEO_FACE_Y+AIM_MEMBER_VIDEO_FACE_HEIGHT, RGB(0, 0, 0) );
 	InvalidateRegion(AIM_MEMBER_VIDEO_FACE_X,AIM_MEMBER_VIDEO_FACE_Y, AIM_MEMBER_VIDEO_FACE_X+AIM_MEMBER_VIDEO_FACE_WIDTH,AIM_MEMBER_VIDEO_FACE_Y+AIM_MEMBER_VIDEO_FACE_HEIGHT);
 
 	return(FALSE);

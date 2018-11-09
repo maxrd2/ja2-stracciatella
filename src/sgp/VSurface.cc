@@ -38,6 +38,13 @@ SGPVSurface::SGPVSurface(UINT16 const w, UINT16 const h, UINT8 const bpp) :
 			break;
 		}
 
+		case 32:
+		{
+			SDL_PixelFormat const* f = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+			s = SDL_CreateRGBSurface(0, w, h, bpp, f->Rmask, f->Gmask, f->Bmask, f->Amask);
+			break;
+		}
+
 		default:
 			throw std::logic_error("Tried to create video surface with invalid bpp, must be 8 or 16.");
 	}
@@ -102,23 +109,25 @@ void SGPVSurface::SetPalette(const SGPPaletteEntry* const src_pal)
 }
 
 
-void SGPVSurface::SetTransparency(const COLORVAL colour)
+void SGPVSurface::SetTransparency(const COLORVAL color)
 {
-	Uint32 colour_key;
+	return; // maxrd2 - drop this we're handling transparency with alpha
+	Uint32 color_key;
 	switch (BPP())
 	{
-		case  8: colour_key = colour;                break;
-		case 16: colour_key = Get16BPPColor(colour); break;
+		case  8: color_key = color; break; // FIXME: maxrd2, should we drop this altogether?
+		case 16: color_key = color; break;
+		case 32: color_key = color; break;
 
 		default: abort(); // HACK000E
 	}
-	SDL_SetColorKey(surface_, SDL_TRUE, colour_key);
+	SDL_SetColorKey(surface_, SDL_TRUE, color_key);
 }
 
 
-void SGPVSurface::Fill(const UINT16 colour)
+void SGPVSurface::Fill(const UINT32 color)
 {
-	SDL_FillRect(surface_, NULL, colour);
+	SDL_FillRect(surface_, NULL, color);
 }
 
 SGPVSurfaceAuto::SGPVSurfaceAuto(UINT16 w, UINT16 h, UINT8 bpp)
@@ -170,13 +179,13 @@ static void InternalShadowVideoSurfaceRect(SGPVSurface* const dst, INT32 X1, INT
 
 void SGPVSurface::ShadowRect(INT32 const x1, INT32 const y1, INT32 const x2, INT32 const y2)
 {
-	InternalShadowVideoSurfaceRect(this, x1, y1, x2, y2, ShadeTable);
+	InternalShadowVideoSurfaceRect(this, x1, y1, x2, y2, (UINT16*)ShadeTable);
 }
 
 
 void SGPVSurface::ShadowRectUsingLowPercentTable(INT32 const x1, INT32 const y1, INT32 const x2, INT32 const y2)
 {
-	InternalShadowVideoSurfaceRect(this, x1, y1, x2, y2, IntensityTable);
+	InternalShadowVideoSurfaceRect(this, x1, y1, x2, y2, (UINT16*)IntensityTable);
 }
 
 SGPVSurface* g_back_buffer;
@@ -207,6 +216,7 @@ SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* const Filename)
 	{
 		case  8: buffer_bpp = BUFFER_8BPP;  break;
 		case 16: buffer_bpp = BUFFER_16BPP; break;
+		case 32: buffer_bpp = BUFFER_32BPP; break;
 		default: throw std::logic_error("Invalid bpp");
 	}
 
@@ -221,7 +231,7 @@ SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* const Filename)
 		}
 	}
 
-	if (img->ubBitDepth == 8) vs->SetPalette(img->pPalette);
+	if (img->pPalette/*img->ubBitDepth == 8*/) vs->SetPalette(img->pPalette); // TODO: FIXME: @maxrd2 we don't really need palette
 
 	return vs;
 }
@@ -259,7 +269,7 @@ void BltVideoSurfaceHalf(SGPVSurface* const dst, SGPVSurface* const src, INT32 c
 }
 
 
-void ColorFillVideoSurfaceArea(SGPVSurface* const dst, INT32 iDestX1, INT32 iDestY1, INT32 iDestX2, INT32 iDestY2, const UINT16 Color16BPP)
+void ColorFillVideoSurfaceArea(SGPVSurface* const dst, INT32 iDestX1, INT32 iDestY1, INT32 iDestX2, INT32 iDestY2, const UINT32 Color)
 {
 	SGPRect Clip;
 	GetClippingRect(&Clip);
@@ -283,7 +293,7 @@ void ColorFillVideoSurfaceArea(SGPVSurface* const dst, INT32 iDestX1, INT32 iDes
 	Rect.y = iDestY1;
 	Rect.w = iDestX2 - iDestX1;
 	Rect.h = iDestY2 - iDestY1;
-	SDL_FillRect(dst->surface_, &Rect, Color16BPP);
+	SDL_FillRect(dst->surface_, &Rect, Color);
 }
 
 
