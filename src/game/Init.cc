@@ -81,9 +81,6 @@ try
 	// INit shade tables
 	BuildShadeTable( );
 
-	// INit intensity tables
-	BuildIntensityTable( );
-
 	// Init Event Manager
 	InitializeEventManager();
 

@@ -31,7 +31,7 @@ struct VIDEO_OVERLAY
 	BOOLEAN          fActivelySaving;
 	BOOLEAN          fDeletionPending;
 	BACKGROUND_SAVE* background;
-	UINT16*          pSaveArea;
+	UINT32*          pSaveArea;
 	SGPFont          uiFontID;
 	INT16            sX;
 	INT16            sY;
@@ -93,6 +93,6 @@ void EnableVideoOverlay(BOOLEAN fEnable, VIDEO_OVERLAY*);
 void SetVideoOverlayTextF(VIDEO_OVERLAY*, const wchar_t* fmt, ...);
 void SetVideoOverlayPos(VIDEO_OVERLAY*, INT16 X, INT16 Y);
 
-void BlitBufferToBuffer(SGPVSurface* src, SGPVSurface* dst, UINT16 usSrcX, UINT16 usSrcY, UINT16 usWidth, UINT16 usHeight);
+void BlitBufferToBuffer(SGPVSurface* const src, SGPVSurface* const dst, const UINT16 usSrcX, const UINT16 usSrcY, const UINT16 usWidth, const UINT16 usHeight);
 
 #endif

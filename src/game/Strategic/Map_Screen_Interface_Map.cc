@@ -3508,7 +3508,7 @@ static void BlitMineText(UINT8 const mine_idx, INT16 const sMapX, INT16 const sM
 static void BlitTownGridMarkers(void)
 {
 	SGPVSurface::Lock l(guiSAVEBUFFER);
-	UINT16* const buf   = l.Buffer<UINT16>();
+	UINT32* const buf   = l.Buffer<UINT32>();
 	UINT32  const pitch = l.Pitch();
 
 	ClipBlitsToMapViewRegionForRectangleAndABit(pitch);
@@ -3603,7 +3603,7 @@ static void BlitMineGridMarkers(void)
 			h = MAP_GRID_Y;
 		}
 
-		RectangleDraw(TRUE, x, y - 1, x + w, y + h - 1, color, l.Buffer<UINT16>());
+		RectangleDraw(TRUE, x, y - 1, x + w, y + h - 1, color, l.Buffer<UINT32>());
 	}
 
 	RestoreClipRegionToFullScreenForRectangle(pitch);
@@ -4741,7 +4741,7 @@ static void BlitSAMGridMarkers()
 			h = MAP_GRID_Y;
 		}
 
-		RectangleDraw(TRUE, x, y - 1, x + w, y + h - 1, color, l.Buffer<UINT16>());
+		RectangleDraw(TRUE, x, y - 1, x + w, y + h - 1, color, l.Buffer<UINT32>());
 	}
 
 	RestoreClipRegionToFullScreenForRectangle(uiDestPitchBYTES);

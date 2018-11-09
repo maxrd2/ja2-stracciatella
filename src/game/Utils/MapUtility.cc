@@ -232,12 +232,13 @@ ScreenID MapUtilScreenHandle()
 	{ SGPVSurface::Lock lsrc(gi8BitMiniMap);
 		UINT8* const pDataPtr = lsrc.Buffer<UINT8>();
 		{ SGPVSurface::Lock ldst(FRAME_BUFFER);
-			UINT16* const pDestBuf         = ldst.Buffer<UINT16>();
+			UINT32* const pDestBuf         = ldst.Buffer<UINT32>();
 			UINT32  const uiDestPitchBYTES = ldst.Pitch();
 			QuantizeImage(pDataPtr, p24BitValues, MINIMAP_X_SIZE, MINIMAP_Y_SIZE, pPalette);
 			gi8BitMiniMap->SetPalette(pPalette);
 			// Blit!
-			Blt8BPPDataTo16BPPBuffer(pDestBuf, uiDestPitchBYTES, gi8BitMiniMap, pDataPtr, 300, 360);
+			Assert(FALSE);
+//			Blt32BPPDataTo32BPPBuffer((UINT16*)pDestBuf, uiDestPitchBYTES, gi8BitMiniMap, pDataPtr, 300, 360); // maxrd2 FIXME? we have 8pp buffer here
 
 			// Write palette!
 			{
