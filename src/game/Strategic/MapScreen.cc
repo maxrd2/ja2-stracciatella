@@ -485,7 +485,7 @@ static void ContractListRegionBoxGlow(UINT16 usCount)
 	UINT32 usColor = GlowColor(iColorNum);
 	SGPVSurface::Lock l(FRAME_BUFFER);
 	SetClippingRegionAndImageWidth(l.Pitch(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	RectangleDraw(TRUE, TIME_REMAINING_X, usY, TIME_REMAINING_X + TIME_REMAINING_WIDTH, usY + GetFontHeight(MAP_SCREEN_FONT) + 2, usColor, l.Buffer<UINT16>());
+	RectangleDraw(TRUE, TIME_REMAINING_X, usY, TIME_REMAINING_X + TIME_REMAINING_WIDTH, usY + GetFontHeight(MAP_SCREEN_FONT) + 2, usColor, l.Buffer<UINT32>());
 	InvalidateRegion(TIME_REMAINING_X - 1, usY, TIME_REMAINING_X + TIME_REMAINING_WIDTH + 1, usY + GetFontHeight( MAP_SCREEN_FONT ) + 3 );
 }
 
@@ -544,7 +544,7 @@ static void GlowItem(void)
 	UINT32 usColor = GlowColor(iColorNum);
 	SGPVSurface::Lock l(FRAME_BUFFER);
 	SetClippingRegionAndImageWidth(l.Pitch(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	RectangleDraw(TRUE, STD_SCREEN_X + 3, STD_SCREEN_Y + 80, STD_SCREEN_X + 64, STD_SCREEN_Y + 104, usColor, l.Buffer<UINT16>());
+	RectangleDraw(TRUE, STD_SCREEN_X + 3, STD_SCREEN_Y + 80, STD_SCREEN_X + 64, STD_SCREEN_Y + 104, usColor, l.Buffer<UINT32>());
 	InvalidateRegion( STD_SCREEN_X + 3, STD_SCREEN_Y + 80, STD_SCREEN_X + 65, STD_SCREEN_Y + 105 );
 }
 
@@ -581,7 +581,7 @@ static void GlowTrashCan(void)
 	UINT32 usColor = GlowColor(iColorNum);
 	{ SGPVSurface::Lock l(FRAME_BUFFER);
 		SetClippingRegionAndImageWidth(l.Pitch(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		RectangleDraw(TRUE, TRASH_CAN_X, TRASH_CAN_Y, TRASH_CAN_X + TRASH_CAN_WIDTH, TRASH_CAN_Y + TRASH_CAN_HEIGHT, usColor, l.Buffer<UINT16>());
+		RectangleDraw(TRUE, TRASH_CAN_X, TRASH_CAN_Y, TRASH_CAN_X + TRASH_CAN_WIDTH, TRASH_CAN_Y + TRASH_CAN_HEIGHT, usColor, l.Buffer<UINT32>());
 		InvalidateRegion( TRASH_CAN_X, TRASH_CAN_Y, TRASH_CAN_X + TRASH_CAN_WIDTH + 1, TRASH_CAN_Y + TRASH_CAN_HEIGHT + 1 );
 	}
 
@@ -1135,7 +1135,7 @@ static void HighLightSelection(HighLightState& state, INT32 const line, UINT16 c
 
 	SGPVSurface::Lock l(FRAME_BUFFER);
 	SetClippingRegionAndImageWidth(l.Pitch(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	UINT16* const pDestBuf = l.Buffer<UINT16>();
+	UINT32* const pDestBuf = l.Buffer<UINT32>();
 
 	UINT32 const color = GlowColor(state.color_idx);
 	INT32  const h      = Y_SIZE + Y_OFFSET;
@@ -3450,7 +3450,7 @@ static void RenderMapHighlight(INT16 sMapX, INT16 sMapY, UINT32 usLineColor, BOO
 
 	// blit in the highlighted sector
 	SGPVSurface::Lock l(FRAME_BUFFER);
-	UINT16* const pDestBuf         = l.Buffer<UINT16>();
+	UINT32* const pDestBuf         = l.Buffer<UINT32>();
 	UINT32  const uiDestPitchBYTES = l.Pitch();
 
 	// clip to view region
@@ -6984,7 +6984,7 @@ static void CheckForAndRenderNewMailOverlay(void)
 					SGPRect area = { (UINT16)(STD_SCREEN_X + 463), (UINT16)(STD_SCREEN_Y + 417), (UINT16)(STD_SCREEN_X + 477), (UINT16)(STD_SCREEN_Y + 425) };
 
 					SGPVSurface::Lock l(FRAME_BUFFER);
-					Blt16BPPBufferHatchRect(l.Buffer<UINT16>(), l.Pitch(), &area);
+					Blt32BPPBufferHatchRect(l.Buffer<UINT32>(), l.Pitch(), &area);
 				}
 				InvalidateRegion( STD_SCREEN_X + 463, STD_SCREEN_Y + 417, STD_SCREEN_X + 481, STD_SCREEN_Y + 430 );
 

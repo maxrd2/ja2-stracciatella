@@ -63,6 +63,8 @@ class SGPVSurface
 		// needs read access to *surface_ to initalize z-buffer properly
 		friend void MainGameScreenInit(void);
 
+		friend void BltVideoSurfaceHalf(SGPVSurface* const dst, SGPVSurface* const src, INT32 const DestX, INT32 const DestY, SGPBox const* const src_rect);
+
 	protected:
 		SDL_Surface*                               surface_;
 		SGP::Buffer<SGPPaletteEntry>               palette_;

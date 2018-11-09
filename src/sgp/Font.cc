@@ -209,7 +209,7 @@ void SetFontAttributes(SGPFont const font, const UINT32 foreground, const UINT32
 }
 
 
-void SetFontDestBuffer(SGPVSurface* const dst, const INT32 x1, const INT32 y1, const INT32 x2, const INT32 y2)
+void SetFontDestBuffer(SGPVSurface *dst, const INT32 x1, const INT32 y1, const INT32 x2, const INT32 y2)
 {
 	Assert(x2 > x1);
 	Assert(y2 > y1);
@@ -222,7 +222,7 @@ void SetFontDestBuffer(SGPVSurface* const dst, const INT32 x1, const INT32 y1, c
 }
 
 
-void SetFontDestBuffer(SGPVSurface* const dst)
+void SetFontDestBuffer(SGPVSurface *dst)
 {
 	SetFontDestBuffer(dst, 0, 0, dst->Width(), dst->Height());
 }
@@ -272,13 +272,13 @@ void gprintf(INT32 x, INT32 const y, wchar_t const* fmt, ...)
 	va_end(ap);
 
 	SGPVSurface::Lock l(FontDestBuffer);
-	UINT16* const buf   = l.Buffer<UINT16>();
+	UINT32* const buf   = l.Buffer<UINT32>();
 	UINT32  const pitch = l.Pitch();
 	SGPFont const font  = FontDefault;
 	for (wchar_t const* i = string; *i != L'\0'; ++i)
 	{
 		GlyphIdx const glyph = GetGlyphIndex(*i);
-		Blt8BPPDataTo16BPPBufferTransparentClip(buf, pitch, font, x, y, glyph, &FontDestRegion);
+		Blt32BPPDataTo32BPPBufferTransparentClip(buf, pitch, font, x, y, glyph, &FontDestRegion);
 		x += GetWidth(font, glyph);
 	}
 }
@@ -288,29 +288,30 @@ UINT32 MPrintChar(INT32 const x, INT32 const y, wchar_t const c)
 {
 	GlyphIdx const glyph = GetGlyphIndex(c);
 	SGPFont  const font  = FontDefault;
-	{ SGPVSurface::Lock l(FontDestBuffer);
-		Blt8BPPDataTo16BPPBufferMonoShadowClip(l.Buffer<UINT16>(), l.Pitch(), font, x, y, glyph, &FontDestRegion, FontForeground32, FontBackground32, FontShadow32);
+	{
+		SGPVSurface::Lock l(FontDestBuffer);
+		Blt8BPPDataTo32BPPBufferMonoShadowClip(l.Buffer<UINT32>(), l.Pitch(), font, x, y, glyph, &FontDestRegion, FontForeground32, FontBackground32, FontShadow32);
 	}
 	return GetWidth(font, glyph);
 }
 
 
-void MPrintBuffer(UINT16* const pDestBuf, UINT32 const uiDestPitchBYTES, INT32 x, INT32 const y, wchar_t const* str)
+void MPrintBuffer(UINT32 *pDestBuf, const UINT32 uiDestPitchBYTES, INT32 x, const INT32 y, const wchar_t *str)
 {
 	SGPFont const font = FontDefault;
 	for (; *str != L'\0'; ++str)
 	{
 		GlyphIdx const glyph = GetGlyphIndex(*str);
-		Blt8BPPDataTo16BPPBufferMonoShadowClip(pDestBuf, uiDestPitchBYTES, font, x, y, glyph, &FontDestRegion, FontForeground32, FontBackground32, FontShadow32);
+		Blt8BPPDataTo32BPPBufferMonoShadowClip(pDestBuf, uiDestPitchBYTES, font, x, y, glyph, &FontDestRegion, FontForeground32, FontBackground32, FontShadow32);
 		x += GetWidth(font, glyph);
 	}
 }
 
 
-void MPrint(INT32 const x, INT32 const y, wchar_t const* const str)
+void MPrint(const INT32 x, const INT32 y, const wchar_t *str)
 {
 	SGPVSurface::Lock l(FontDestBuffer);
-	MPrintBuffer(l.Buffer<UINT16>(), l.Pitch(), x, y, str);
+	MPrintBuffer(l.Buffer<UINT32>(), l.Pitch(), x, y, str);
 }
 
 
@@ -329,7 +330,7 @@ void mprintf(INT32 const x, INT32 const y, wchar_t const* const fmt, ...)
 }
 
 
-void mprintf_buffer(UINT16* const pDestBuf, UINT32 const uiDestPitchBYTES, INT32 const x, INT32 const y, wchar_t const* const fmt, ...)
+void mprintf_buffer(UINT32 *pDestBuf, const UINT32 uiDestPitchBYTES, const INT32 x, const INT32 y, const wchar_t *fmt, ...)
 {
 	wchar_t str[512];
 	va_list ap;

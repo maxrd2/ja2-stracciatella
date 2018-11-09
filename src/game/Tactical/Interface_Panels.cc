@@ -1331,7 +1331,7 @@ no_plate:
 		ClipRect.iTop = INV_INTERFACE_START_Y;
 		ClipRect.iBottom = SCREEN_HEIGHT;
 		SGPVSurface::Lock l(FRAME_BUFFER);
-		Blt16BPPBufferHatchRect(l.Buffer<UINT16>(), l.Pitch(), &ClipRect);
+		Blt32BPPBufferHatchRect(l.Buffer<UINT32>(), l.Pitch(), &ClipRect);
 	}
 }
 

@@ -36,13 +36,13 @@ void SetFontShadow(UINT32 uBackground);
 void gprintf(INT32 x, INT32 y, wchar_t const* fmt, ...);
 
 UINT32 MPrintChar(INT32 x, INT32 y, wchar_t);
-void   MPrintBuffer(UINT16* pDestBuf, UINT32 uiDestPitchBYTES, INT32 x, INT32 y, wchar_t const* str);
-void   MPrint(INT32 x, INT32 y, wchar_t const* str);
+void   MPrintBuffer(UINT32 *pDestBuf, const UINT32 uiDestPitchBYTES, INT32 x, const INT32 y, const wchar_t *str);
+void   MPrint(const INT32 x, const INT32 y, const wchar_t *str);
 void   mprintf(INT32 x, INT32 y, wchar_t const* fmt, ...);
-void   mprintf_buffer(UINT16* pDestBuf, UINT32 uiDestPitchBYTES, INT32 x, INT32 y, wchar_t const* fmt, ...);
+void   mprintf_buffer(UINT32 *pDestBuf, const UINT32 uiDestPitchBYTES, const INT32 x, const INT32 y, const wchar_t *fmt, ...);
 
 /* Sets the destination buffer for printing to and the clipping rectangle. */
-void SetFontDestBuffer(SGPVSurface* dst, INT32 x1, INT32 y1, INT32 x2, INT32 y2);
+void SetFontDestBuffer(SGPVSurface *dst, const INT32 x1, const INT32 y1, const INT32 x2, const INT32 y2);
 
 /* Set the destination buffer for printing while using the whole surface. */
 void SetFontDestBuffer(SGPVSurface* dst);
