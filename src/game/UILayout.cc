@@ -56,7 +56,7 @@ UINT16 UILayout::get_INV_INTERFACE_START_Y() { return m_screenHeight - 140;     
 /** Recalculate UI elements' positions after changing screen size. */
 void UILayout::recalculatePositions()
 {
-	m_stdScreenScale = 1.0;
+	m_stdScreenScale = __min(DOUBLE(m_screenWidth) / MIN_INTERFACE_WIDTH, DOUBLE(m_screenHeight) / MIN_INTERFACE_HEIGHT);
 	m_scaledInterfaceWidth  = m_stdScreenScale * MIN_INTERFACE_WIDTH;
 	m_scaledInterfaceHeight = m_stdScreenScale * MIN_INTERFACE_HEIGHT;
 
