@@ -114,7 +114,7 @@ void RenderMercPopUpBox(MercPopUpBox const* const box, INT16 const sDestX, INT16
 }
 
 
-static void GetMercPopupBoxFontColor(UINT8 ubBackgroundIndex, UINT8* pubFontColor, UINT8* pubFontShadowColor);
+static void GetMercPopupBoxFontColor(UINT8 ubBackgroundIndex, UINT32* pubFontColor, UINT32* pubFontShadowColor);
 
 
 MercPopUpBox* PrepareMercPopupBox(MercPopUpBox* box, MercPopUpBackground const ubBackgroundIndex, MercPopUpBorder const ubBorderIndex, wchar_t const* const pString, UINT16 usWidth, UINT16 const usMarginX, UINT16 const usMarginTopY, UINT16 const usMarginBottomY, UINT16* const pActualWidth, UINT16* const pActualHeight, MercPopupBoxFlags const flags)
@@ -195,8 +195,8 @@ MercPopUpBox* PrepareMercPopupBox(MercPopUpBox* box, MercPopUpBackground const u
 	{
 		// Zero with yellow,
 		// Set source transparcenty
-		vs->SetTransparency(FROMRGB(255, 255, 0));
-		vs->Fill(Get16BPPColor(FROMRGB(255, 255, 0)));
+		vs->SetTransparency(RGB(255, 255, 0));
+		vs->Fill(RGB(255, 255, 0)); // FIXME: maxrd2 probably just set alpha here
 	}
 	else
 	{
@@ -245,8 +245,8 @@ MercPopUpBox* PrepareMercPopupBox(MercPopUpBox* box, MercPopUpBackground const u
 	}
 
 	//Get the font and shadow colors
-	UINT8 ubFontColor;
-	UINT8 ubFontShadowColor;
+	UINT32 ubFontColor;
+	UINT32 ubFontShadowColor;
 	GetMercPopupBoxFontColor(ubBackgroundIndex, &ubFontColor, &ubFontShadowColor);
 
 	SetFontShadow(ubFontShadowColor);
@@ -260,7 +260,7 @@ MercPopUpBox* PrepareMercPopupBox(MercPopUpBox* box, MercPopUpBackground const u
 		sDispTextXPos += 30;
 	}
 
-	DisplayWrappedString(sDispTextXPos, MERC_TEXT_POPUP_WINDOW_TEXT_OFFSET_Y + usMarginTopY, usTextWidth, 2, MERC_TEXT_FONT, ubFontColor, pString, FONT_MCOLOR_BLACK, LEFT_JUSTIFIED);
+	DisplayWrappedString(sDispTextXPos, MERC_TEXT_POPUP_WINDOW_TEXT_OFFSET_Y + usMarginTopY, usTextWidth, 2, MERC_TEXT_FONT, ubFontColor, pString, FONT_MCOLOR_TRANSPARENT, LEFT_JUSTIFIED);
 
 	SetFontDestBuffer(FRAME_BUFFER);
 	SetFontShadow(DEFAULT_SHADOW);
@@ -286,7 +286,7 @@ void RemoveMercPopupBox(MercPopUpBox* const box)
 
 
 //Pass in the background index, and pointers to the font and shadow color
-static void GetMercPopupBoxFontColor(UINT8 ubBackgroundIndex, UINT8* pubFontColor, UINT8* pubFontShadowColor)
+static void GetMercPopupBoxFontColor(UINT8 ubBackgroundIndex, UINT32* pubFontColor, UINT32* pubFontShadowColor)
 {
 	switch( ubBackgroundIndex )
 	{

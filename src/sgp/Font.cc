@@ -4,6 +4,7 @@
 #include "Types.h"
 #include "MemMan.h"
 #include "Font.h"
+#include "Font_Control.h"
 #include "Debug.h"
 #include "TranslationTable.h"
 #include "VSurface.h"
@@ -20,29 +21,26 @@ typedef UINT8 GlyphIdx;
 SGPFont             FontDefault      = 0;
 static SGPVSurface* FontDestBuffer;
 static SGPRect      FontDestRegion   = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-static UINT16       FontForeground16 = 0;
-static UINT16       FontBackground16 = 0;
-static UINT16       FontShadow16     = DEFAULT_SHADOW;
+static UINT32       FontForeground32 = 0;
+static UINT32       FontBackground32 = 0;
+static UINT32       FontShadow32     = DEFAULT_SHADOW;
 
 // Temp, for saving printing parameters
 static SGPFont      SaveFontDefault      = 0;
 static SGPVSurface* SaveFontDestBuffer   = NULL;
 static SGPRect      SaveFontDestRegion   = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-static UINT16       SaveFontForeground16 = 0;
-static UINT16       SaveFontShadow16     = 0;
-static UINT16       SaveFontBackground16 = 0;
+static UINT32       SaveFontForeground16 = 0;
+static UINT32       SaveFontShadow16     = 0;
+static UINT32       SaveFontBackground16 = 0;
 
 
 /* Sets both the foreground and the background colors of the current font. The
  * top byte of the parameter word is the background color, and the bottom byte
  * is the foreground. */
-void SetFontColors(UINT16 usColors)
+void SetFontColors(UINT32 uForeground, UINT32 uBackground)
 {
-	UINT8 ubForeground = usColors & 0xFF;
-	UINT8 ubBackground = (usColors >> 8) & 0xFF;
-
-	SetFontForeground(ubForeground);
-	SetFontBackground(ubBackground);
+	SetFontForeground(uForeground);
+	SetFontBackground(uBackground);
 }
 
 
@@ -51,21 +49,26 @@ void SetFontColors(UINT16 usColors)
  * palette are used to create the pixel color. Note that if you change fonts,
  * the selected foreground/background colors will stay at what they are
  * currently set to. */
-void SetFontForeground(UINT8 ubForeground)
+void SetFontForeground(UINT32 uForeground)
 {
-	if (!FontDefault) return;
-	const SGPPaletteEntry* const c = &FontDefault->Palette()[ubForeground];
-	FontForeground16 = Get16BPPColor(FROMRGB(c->r, c->g, c->b));
+	FontForeground32 = uForeground;
+
+//	if (!FontDefault) return;
+//	const SGPPaletteEntry *c = FontDefault->Palette();
+
+//	printf("const UINT32 gColorFromPalette[256] = {\n");
+//	for(int i = 0; i < 256; i++)
+//		printf("\tRGB(%3d, %3d, %3d),\n", c[i].r, c[i].g, c[i].b);
+//	printf("};\n\n");
+
+//	for(int i = 0; i < 256; i++)
+//		printf("#define FONT_COLOR_P%-3d RGB(%3d, %3d, %3d)\n", i, c[i].r, c[i].g, c[i].b);
 }
 
 
-void SetFontShadow(UINT8 ubShadow)
+void SetFontShadow(UINT32 uShadow)
 {
-	if (!FontDefault) return;
-	const SGPPaletteEntry* const c = &FontDefault->Palette()[ubShadow];
-	FontShadow16 = Get16BPPColor(FROMRGB(c->r, c->g, c->b));
-
-	if (ubShadow != 0 && FontShadow16 == 0) FontShadow16 = 1;
+	FontShadow32 = uShadow;
 }
 
 
@@ -75,11 +78,9 @@ void SetFontShadow(UINT8 ubShadow)
  * the background of the font will be transparent.  Note that if you change
  * fonts, the selected foreground/background colors will stay at what they are
  * currently set to. */
-void SetFontBackground(UINT8 ubBackground)
+void SetFontBackground(UINT32 uBackground)
 {
-	if (!FontDefault) return;
-	const SGPPaletteEntry* const c = &FontDefault->Palette()[ubBackground];
-	FontBackground16 = Get16BPPColor(FROMRGB(c->r, c->g, c->b));
+	FontBackground32 = uBackground;
 }
 
 
@@ -130,9 +131,9 @@ void SaveFontSettings(void)
 	SaveFontDefault      = FontDefault;
 	SaveFontDestBuffer   = FontDestBuffer;
 	SaveFontDestRegion   = FontDestRegion;
-	SaveFontForeground16 = FontForeground16;
-	SaveFontShadow16     = FontShadow16;
-	SaveFontBackground16 = FontBackground16;
+	SaveFontForeground16 = FontForeground32;
+	SaveFontShadow16     = FontShadow32;
+	SaveFontBackground16 = FontBackground32;
 }
 
 
@@ -142,9 +143,9 @@ void RestoreFontSettings(void)
 	FontDefault      = SaveFontDefault;
 	FontDestBuffer   = SaveFontDestBuffer;
 	FontDestRegion   = SaveFontDestRegion;
-	FontForeground16 = SaveFontForeground16;
-	FontShadow16     = SaveFontShadow16;
-	FontBackground16 = SaveFontBackground16;
+	FontForeground32 = SaveFontForeground16;
+	FontShadow32     = SaveFontShadow16;
+	FontBackground32 = SaveFontBackground16;
 }
 
 
@@ -199,7 +200,7 @@ void SetFont(SGPFont const font)
 }
 
 
-void SetFontAttributes(SGPFont const font, UINT8 const foreground, UINT8 const shadow, UINT8 const background)
+void SetFontAttributes(SGPFont const font, const UINT32 foreground, const UINT32 shadow, const UINT32 background)
 {
 	SetFont(font);
 	SetFontForeground(foreground);
@@ -288,7 +289,7 @@ UINT32 MPrintChar(INT32 const x, INT32 const y, wchar_t const c)
 	GlyphIdx const glyph = GetGlyphIndex(c);
 	SGPFont  const font  = FontDefault;
 	{ SGPVSurface::Lock l(FontDestBuffer);
-		Blt8BPPDataTo16BPPBufferMonoShadowClip(l.Buffer<UINT16>(), l.Pitch(), font, x, y, glyph, &FontDestRegion, FontForeground16, FontBackground16, FontShadow16);
+		Blt8BPPDataTo16BPPBufferMonoShadowClip(l.Buffer<UINT16>(), l.Pitch(), font, x, y, glyph, &FontDestRegion, FontForeground32, FontBackground32, FontShadow32);
 	}
 	return GetWidth(font, glyph);
 }
@@ -300,7 +301,7 @@ void MPrintBuffer(UINT16* const pDestBuf, UINT32 const uiDestPitchBYTES, INT32 x
 	for (; *str != L'\0'; ++str)
 	{
 		GlyphIdx const glyph = GetGlyphIndex(*str);
-		Blt8BPPDataTo16BPPBufferMonoShadowClip(pDestBuf, uiDestPitchBYTES, font, x, y, glyph, &FontDestRegion, FontForeground16, FontBackground16, FontShadow16);
+		Blt8BPPDataTo16BPPBufferMonoShadowClip(pDestBuf, uiDestPitchBYTES, font, x, y, glyph, &FontDestRegion, FontForeground32, FontBackground32, FontShadow32);
 		x += GetWidth(font, glyph);
 	}
 }

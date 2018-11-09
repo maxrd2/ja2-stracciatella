@@ -56,7 +56,7 @@ BOOLEAN HandleCompatibleAmmoUI(const SOLDIERTYPE* pSoldier, INT8 bInvPos, BOOLEA
 //              if == DIRTYLEVEL1 will render bullets and status only
 //
 //  Last parameter used mainly for when mouse is over item
-void INVRenderItem(SGPVSurface* uiBuffer, SOLDIERTYPE const* pSoldier, OBJECTTYPE const&, INT16 sX, INT16 sY, INT16 sWidth, INT16 sHeight, DirtyLevel, UINT8 ubStatusIndex, INT16 sOutlineColor);
+void INVRenderItem(SGPVSurface* uiBuffer, SOLDIERTYPE const* pSoldier, OBJECTTYPE const&, INT16 sX, INT16 sY, INT16 sWidth, INT16 sHeight, DirtyLevel, UINT8 ubStatusIndex, UINT32 sOutlineColor);
 
 
 extern BOOLEAN gfInItemDescBox;
@@ -100,7 +100,7 @@ void EndItemPointer(void);
 void DrawItemFreeCursor(void);
 void DrawItemTileCursor(void);
 BOOLEAN HandleItemPointerClick( UINT16 usMapPos );
-UINT8 GetAttachmentHintColor(const OBJECTTYPE* pObj);
+UINT32 GetAttachmentHintColor(const OBJECTTYPE* pObj);
 SGPVObject const& GetInterfaceGraphicForItem(const ItemModel *item);
 UINT16            GetTileGraphicForItem(const ItemModel *item);
 SGPVObject*       LoadTileGraphicForItem(const ItemModel *item);

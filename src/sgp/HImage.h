@@ -18,6 +18,7 @@
 // Defines for buffer bit depth
 #define BUFFER_8BPP							0x1
 #define BUFFER_16BPP						0x2
+#define BUFFER_32BPP						0x4
 
 // Defines for image charactoristics
 #define IMAGE_TRLECOMPRESSED		0x0002
@@ -118,8 +119,6 @@ void GetETRLEImageData(SGPImage const*, ETRLEData*);
 // Used to create a 16BPP Palette from an 8 bit palette, found in himage.c
 UINT16* Create16BPPPaletteShaded(const SGPPaletteEntry* pPalette, UINT32 rscale, UINT32 gscale, UINT32 bscale, BOOLEAN mono);
 UINT16* Create16BPPPalette(const SGPPaletteEntry* pPalette);
-UINT16 Get16BPPColor( UINT32 RGBValue );
-UINT32 GetRGBColor( UINT16 Value16BPP );
 
 extern UINT16 gusRedMask;
 extern UINT16 gusGreenMask;
@@ -127,12 +126,6 @@ extern UINT16 gusBlueMask;
 extern INT16  gusRedShift;
 extern INT16  gusBlueShift;
 extern INT16  gusGreenShift;
-
-// used to convert 565 RGB data into different bit-formats
-void ConvertRGBDistribution565To555( UINT16 * p16BPPData, UINT32 uiNumberOfPixels );
-void ConvertRGBDistribution565To655( UINT16 * p16BPPData, UINT32 uiNumberOfPixels );
-void ConvertRGBDistribution565To556( UINT16 * p16BPPData, UINT32 uiNumberOfPixels );
-void ConvertRGBDistribution565ToAny( UINT16 * p16BPPData, UINT32 uiNumberOfPixels );
 
 typedef SGP::AutoPtr<SGPImage> AutoSGPImage;
 
