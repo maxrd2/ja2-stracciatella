@@ -2166,6 +2166,9 @@ CreateObjectPaletteTables
 **********************************************************************************************/
 void CreateTilePaletteTables(const HVOBJECT pObj)
 {
+	// FIXME: maxrd2 - we wont be using this most likely so drop it
+	return;
+
 	Assert(pObj != NULL);
 
 	// build the shade tables

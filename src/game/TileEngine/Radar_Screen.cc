@@ -89,10 +89,11 @@ void LoadRadarScreenBitmap(const char *filename)
 	SGPVObject* const radar = AddVideoObjectFromFile(image_filename.c_str());
 	gusRadarImage = radar;
 
+	// FIXME: maxrd2 this can all go
 	// ATE: Add a shade table!
-	const SGPPaletteEntry* const pal = radar->Palette();
-	radar->pShades[0] = Create16BPPPaletteShaded(pal, 255, 255, 255, FALSE);
-	radar->pShades[1] = Create16BPPPaletteShaded(pal, 100, 100, 100, FALSE);
+//	const SGPPaletteEntry* const pal = radar->Palette();
+//	radar->pShades[0] = Create16BPPPaletteShaded(pal, 255, 255, 255, FALSE);
+//	radar->pShades[1] = Create16BPPPaletteShaded(pal, 100, 100, 100, FALSE);
 
 	// Dirty interface
 	fInterfacePanelDirty = DIRTYLEVEL1;
@@ -207,13 +208,14 @@ void RenderRadarScreen()
 	if (fInterfacePanelDirty == DIRTYLEVEL2 && gusRadarImage)
 	{
 		// If night time and on surface, darken the radarmap.
-		size_t const shade =
-			NightTime() &&
-			(
-				(guiCurrentScreen == MAP_SCREEN  && iCurrentMapSectorZ == 0) ||
-				(guiCurrentScreen == GAME_SCREEN && gbWorldSectorZ     == 0)
-			) ? 1 : 0;
-		gusRadarImage->CurrentShade(shade);
+		// FIXME: maxrd2: we don't have shades anymore
+//		size_t const shade =
+//			NightTime() &&
+//			(
+//				(guiCurrentScreen == MAP_SCREEN  && iCurrentMapSectorZ == 0) ||
+//				(guiCurrentScreen == GAME_SCREEN && gbWorldSectorZ     == 0)
+//			) ? 1 : 0;
+//		gusRadarImage->CurrentShade(shade);
 		BltVideoObject(guiSAVEBUFFER, gusRadarImage, 0, RADAR_WINDOW_X, RADAR_WINDOW_TM_Y);
 	}
 
