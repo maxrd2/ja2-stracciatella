@@ -1104,28 +1104,28 @@ static void ShadeMapElemZoomIn(const INT16 sMapX, const INT16 sMapY, INT32 iColo
 
 void InitializePalettesForMap(void)
 {
-	SGP::AutoPtr<SGPVSurfaceAuto> uiTempMap(AddVideoSurfaceFromFile(INTERFACEDIR "/b_map.pcx"));
+//	SGP::AutoPtr<SGPVSurfaceAuto> uiTempMap(AddVideoSurfaceFromFile(INTERFACEDIR "/b_map.pcx"));
 
-	SGPPaletteEntry const* const pal = uiTempMap->GetPalette();
+//	SGPPaletteEntry const* const pal = uiTempMap->GetPalette();
 
-	pMapLTRedPalette   = Create16BPPPaletteShaded(pal, 400,   0, 0, TRUE);
-	pMapDKRedPalette   = Create16BPPPaletteShaded(pal, 200,   0, 0, TRUE);
-	pMapLTGreenPalette = Create16BPPPaletteShaded(pal,   0, 400, 0, TRUE);
-	pMapDKGreenPalette = Create16BPPPaletteShaded(pal,   0, 200, 0, TRUE);
+//	pMapLTRedPalette   = Create16BPPPaletteShaded(pal, 400,   0, 0, TRUE);
+//	pMapDKRedPalette   = Create16BPPPaletteShaded(pal, 200,   0, 0, TRUE);
+//	pMapLTGreenPalette = Create16BPPPaletteShaded(pal,   0, 400, 0, TRUE);
+//	pMapDKGreenPalette = Create16BPPPaletteShaded(pal,   0, 200, 0, TRUE);
 }
 
 
 void ShutDownPalettesForMap(void)
 {
-	MemFree(pMapLTRedPalette);
-	MemFree(pMapDKRedPalette);
-	MemFree(pMapLTGreenPalette);
-	MemFree(pMapDKGreenPalette);
+//	MemFree(pMapLTRedPalette);
+//	MemFree(pMapDKRedPalette);
+//	MemFree(pMapLTGreenPalette);
+//	MemFree(pMapDKGreenPalette);
 
-	pMapLTRedPalette   = NULL;
-	pMapDKRedPalette   = NULL;
-	pMapLTGreenPalette = NULL;
-	pMapDKGreenPalette = NULL;
+//	pMapLTRedPalette   = NULL;
+//	pMapDKRedPalette   = NULL;
+//	pMapLTGreenPalette = NULL;
+//	pMapDKGreenPalette = NULL;
 }
 
 

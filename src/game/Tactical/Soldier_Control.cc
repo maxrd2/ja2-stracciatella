@@ -4675,7 +4675,7 @@ static UINT16* CreateEnemyGreyGlow16BPPPalette(const SGPPaletteEntry* pPalette, 
 
 void CreateSoldierPalettes(SOLDIERTYPE& s)
 {
-	// FIXME: maxrd2 we're not supposed to use palette anymore
+	// FIXME: maxrd2 we're not supposed to use palette anymore - TODO: convert to shades
 	return;
 
 	// --- TAKE FROM CURRENT ANIMATION HVOBJECT!

@@ -69,7 +69,7 @@ class SGPVSurface
 		SDL_Surface*                               surface_;
 		SGP::Buffer<SGPPaletteEntry>               palette_;
 	public:
-		UINT16*                                    p16BPPPalette; // A 16BPP palette used for 8->16 blits
+		UINT32                                    p16BPPPalette; // A 16BPP palette used for 8->16 blits
 #ifdef SGP_VIDEO_DEBUGGING
 		char*                        name_;
 		char*                        code_;
@@ -158,10 +158,12 @@ SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* Filename);
 extern UINT32 guiVSurfaceSize;
 #endif
 
+void BltVideoSurface(SGPVSurface* const dst, SGPVSurface* const src, INT32 const iDestX, INT32 const iDestY, SGPBox const* const src_box);
+
 /* Blits a video surface in half size to another video surface.
  * If SrcRect is NULL the entire source surface is blitted.
  * Only blitting from 8bbp surfaces to 16bpp surfaces is supported. */
-void BltVideoSurfaceHalf(SGPVSurface* dst, SGPVSurface* src, INT32 DestX, INT32 DestY, SGPBox const* src_rect);
+void BltVideoSurfaceHalf(SGPVSurface* const dst, SGPVSurface* const src, INT32 const DestX, INT32 const DestY, SGPBox const* const src_rect);
 
 // Deletes all data, including palettes
 static inline void DeleteVideoSurface(SGPVSurface* const vs)

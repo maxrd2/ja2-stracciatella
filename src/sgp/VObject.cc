@@ -42,7 +42,7 @@ SGPVObject::SGPVObject(SGPImage const* const img) :
 #endif
 	next_(gpVObjectHead)
 {
-	std::fill(std::begin(pShades), std::end(pShades), nullptr);
+	std::fill(std::begin(pShades), std::end(pShades), RGBA(0, 0, 0, 0));
 
 	if (!(img->fFlags & IMAGE_TRLECOMPRESSED))
 	{
@@ -67,7 +67,8 @@ SGPVObject::SGPVObject(SGPImage const* const img) :
 		memcpy(pal, src_pal, sizeof(*pal) * 256);
 
 		palette16_     = Create16BPPPalette(pal);
-		current_shade_ = palette16_;
+//		current_shade_ = palette16_; // FIXME: maxrd2 - should be good like this
+		current_shade_ = RGBA(0, 0, 0, 0); // no shade - transparent
 	}
 
 	gpVObjectHead = this;
@@ -116,7 +117,7 @@ SGPVObject::~SGPVObject()
 
 void SGPVObject::CurrentShade(size_t const idx)
 {
-	if (idx >= lengthof(pShades) || !pShades[idx])
+	if (idx >= lengthof(pShades) /*|| !pShades[idx]*/)
 	{
 		throw std::logic_error("Tried to set invalid video object shade");
 	}
@@ -212,15 +213,15 @@ UINT8 SGPVObject::GetETRLEPixelValue(UINT16 const usETRLEIndex, UINT16 const usX
  * new tables are calculated, or things WILL go boom. */
 void SGPVObject::DestroyPalettes()
 {
-	FOR_EACH(UINT16*, i, pShades)
-	{
-		if (flags_ & SHADETABLE_SHARED) continue;
-		UINT16* const p = *i;
-		if (!p)                         continue;
-		if (palette16_ == p) palette16_ = 0;
-		*i = 0;
-		MemFree(p);
-	}
+//	FOR_EACH(UINT16*, i, pShades)
+//	{
+//		if (flags_ & SHADETABLE_SHARED) continue;
+//		UINT16* const p = *i;
+//		if (!p)                         continue;
+//		if (palette16_ == p) palette16_ = 0;
+//		*i = 0;
+//		MemFree(p);
+//	}
 
 	if (UINT16* const p = palette16_)
 	{
