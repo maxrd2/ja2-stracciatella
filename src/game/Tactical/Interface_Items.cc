@@ -1776,7 +1776,7 @@ static void ItemDescDoneButtonCallback(GUI_BUTTON* btn, INT32 reason);
 static void ReloadItemDesc(void);
 
 
-void InternalInitItemDescriptionBox(OBJECTTYPE* const o, const INT16 sX, const INT16 sY, const UINT8 ubStatusIndex, SOLDIERTYPE* const s)
+void InternalInitItemDescriptionBox(OBJECTTYPE *o, const INT16 sX, const INT16 sY, const UINT8 ubStatusIndex, SOLDIERTYPE *s)
 {
 	// Set the current screen
 	guiCurrentItemDescriptionScreen = guiCurrentScreen;
@@ -1801,7 +1801,8 @@ void InternalInitItemDescriptionBox(OBJECTTYPE* const o, const INT16 sX, const I
 	}
 	else
 	{
-		MSYS_DefineRegion(&gInvDesc, gsInvDescX, gsInvDescY, gsInvDescX + ITEMDESC_WIDTH, gsInvDescY + ITEMDESC_HEIGHT, MSYS_PRIORITY_HIGHEST, MSYS_NO_CURSOR, MSYS_NO_CALLBACK, ItemDescCallback);
+		MSYS_DefineRegion(&gInvDesc, gsInvDescX, gsInvDescY, gsInvDescX + ITEMDESC_WIDTH, gsInvDescY + ITEMDESC_HEIGHT,
+			MSYS_PRIORITY_HIGHEST, MSYS_NO_CURSOR, MSYS_NO_CALLBACK, ItemDescCallback);
 	}
 
 	if (GCM->getItem(o->usItem)->isGun()&& o->usItem != ROCKET_LAUNCHER)
@@ -1826,7 +1827,7 @@ void InternalInitItemDescriptionBox(OBJECTTYPE* const o, const INT16 sX, const I
 		const INT16         y  = gsInvDescY + xy->y + xy->h - h; // align with bottom
 		const UINT32        text_col   = ITEMDESC_AMMO_FORE;
 		const UINT32        shadow_col = FONT_MCOLOR_BLACK;
-		const GUIButtonRef ammo_btn   = CreateIconAndTextButton(ammo_img, pStr, TINYFONT1,
+		const GUIButtonRef  ammo_btn = CreateIconAndTextButton(ammo_img, pStr, TINYFONT1,
 			text_col, shadow_col, text_col, shadow_col, x, y, MSYS_PRIORITY_HIGHEST, ItemDescAmmoCallback);
 		giItemDescAmmoButton = ammo_btn;
 
@@ -3740,7 +3741,7 @@ static void ItemPopupFullRegionCallback(MOUSE_REGION* pRegion, INT32 iReason);
 static void ItemPopupRegionCallback(MOUSE_REGION* pRegion, INT32 iReason);
 
 
-void InitItemStackPopup(SOLDIERTYPE* const pSoldier, UINT8 const ubPosition, INT16 const sInvX, INT16 const sInvY, INT16 const sInvWidth, INT16 const sInvHeight)
+void InitItemStackPopup(SOLDIERTYPE *pSoldier, const UINT8 ubPosition, const INT16 sInvX, const INT16 sInvY, const INT16 sInvWidth, const INT16 sInvHeight)
 {
 	SGPRect aRect;
 	UINT8 ubLimit;
@@ -3753,14 +3754,11 @@ void InitItemStackPopup(SOLDIERTYPE* const pSoldier, UINT8 const ubPosition, INT
 	gsItemPopupInvY = sInvY;
 	gsItemPopupInvWidth = sInvWidth;
 	gsItemPopupInvHeight = sInvHeight;
-
-
 	gpItemPopupSoldier = pSoldier;
 
-
 	// Determine # of items
-	gpItemPopupObject = &(pSoldier->inv[ ubPosition ] );
-	ubLimit = ItemSlotLimit( gpItemPopupObject->usItem, ubPosition );
+	gpItemPopupObject = &pSoldier->inv[ubPosition];
+	ubLimit = ItemSlotLimit(gpItemPopupObject->usItem, ubPosition);
 
 	// Return if #objects not >1
 	if (ubLimit < 1) return;
@@ -3778,9 +3776,9 @@ void InitItemStackPopup(SOLDIERTYPE* const pSoldier, UINT8 const ubPosition, INT
 	guiItemPopupBoxes = AddVideoObjectFromFile(INTERFACEDIR "/extra_inventory.sti");
 
 	// Get size
-	ETRLEObject const& pTrav        = guiItemPopupBoxes->SubregionProperties(0);
-	UINT16      const  usPopupWidth = pTrav.usWidth;
-	UINT16      const  usPopupHeight = pTrav.usHeight;
+	const ETRLEObject &pTrav = guiItemPopupBoxes->SubregionProperties(0);
+	const UINT16 usPopupWidth = pTrav.usWidth;
+	const UINT16 usPopupHeight = pTrav.usHeight;
 
 	// Get Width, Height
 	INT16 gsItemPopupWidth = ubCols * usPopupWidth;
@@ -3788,37 +3786,25 @@ void InitItemStackPopup(SOLDIERTYPE* const pSoldier, UINT8 const ubPosition, INT
 	gubNumItemPopups = ubLimit;
 
 	// Calculate X,Y, first center
-	MOUSE_REGION const& r = gSMInvRegion[ubPosition];
-	INT16 sCenX = r.X() - (gsItemPopupWidth / 2 + r.W() / 2);
-	INT16 sCenY	= r.Y()- (gsItemPopupHeight / 2 + r.H() / 2);
+	const MOUSE_REGION &r = gSMInvRegion[ubPosition];
+	INT16 sCenX = r.X() - (gsItemPopupWidth + r.W()) / 2;
+	INT16 sCenY	= r.Y() - (gsItemPopupHeight + r.H()) / 2;
 
 	// Limit it to window for item desc
-	if ( sCenX < gsItemPopupInvX )
-	{
+	if (sCenX < gsItemPopupInvX)
 		sCenX = gsItemPopupInvX;
-	}
-	if ( ( sCenX + gsItemPopupWidth ) > ( gsItemPopupInvX + gsItemPopupInvWidth ) )
-	{
+	if (sCenX + gsItemPopupWidth > gsItemPopupInvX + gsItemPopupInvWidth)
 		sCenX = gsItemPopupInvX + gsItemPopupInvWidth - gsItemPopupWidth;
-	}
-	if ( sCenY < gsItemPopupInvY )
-	{
+	if (sCenY < gsItemPopupInvY)
 		sCenY = gsItemPopupInvY;
-	}
-	if ( sCenY + gsItemPopupHeight > ( gsItemPopupInvY + gsItemPopupInvHeight ) )
-	{
+	if (sCenY + gsItemPopupHeight > gsItemPopupInvY + gsItemPopupInvHeight)
 		sCenY = gsItemPopupInvY + gsItemPopupInvHeight - gsItemPopupHeight;
-	}
 
 	// Cap it at 0....
-	if ( sCenX < 0 )
-	{
+	if (sCenX < 0)
 		sCenX = 0;
-	}
 	if ( sCenY < 0 )
-	{
 		sCenY = 0;
-	}
 
 	// Set
 	gsItemPopupX	= sCenX;
@@ -3840,7 +3826,9 @@ void InitItemStackPopup(SOLDIERTYPE* const pSoldier, UINT8 const ubPosition, INT
 
 
 	// Build a mouse region here that is over any others.....
-	MSYS_DefineRegion(&gItemPopupRegion, gsItemPopupInvX, gsItemPopupInvY, gsItemPopupInvX + gsItemPopupInvWidth, gsItemPopupInvY + gsItemPopupInvHeight, MSYS_PRIORITY_HIGH, MSYS_NO_CURSOR, MSYS_NO_CALLBACK, ItemPopupFullRegionCallback);
+	MSYS_DefineRegion(&gItemPopupRegion, gsItemPopupInvX, gsItemPopupInvY,
+		gsItemPopupInvX + gsItemPopupInvWidth, gsItemPopupInvY + gsItemPopupInvHeight,
+		MSYS_PRIORITY_HIGH, MSYS_NO_CURSOR, MSYS_NO_CALLBACK, ItemPopupFullRegionCallback);
 
 
 	//Disable all faces
@@ -3851,18 +3839,16 @@ void InitItemStackPopup(SOLDIERTYPE* const pSoldier, UINT8 const ubPosition, INT
 
 	gfInItemStackPopup = TRUE;
 
-	if( guiCurrentItemDescriptionScreen != MAP_SCREEN )
-	{
+	if(guiCurrentItemDescriptionScreen != MAP_SCREEN)
 		EnableSMPanelButtons( FALSE, FALSE );
-	}
 
-	//Reserict mouse cursor to panel
+	// Restrict mouse cursor to panel
 	aRect.iTop = sInvY;
 	aRect.iLeft = sInvX;
 	aRect.iBottom = sInvY + sInvHeight;
 	aRect.iRight = sInvX + sInvWidth;
 
-	RestrictMouseCursor( &aRect );
+	RestrictMouseCursor(&aRect);
 }
 
 
@@ -3886,16 +3872,13 @@ void RenderItemStackPopup( BOOLEAN fFullRender )
 		SetAllAutoFacesInactive( );
 
 		// Shadow Area
-		if ( fFullRender )
-		{
+		if (fFullRender)
 			FRAME_BUFFER->ShadowRect(gsItemPopupInvX, gsItemPopupInvY, gsItemPopupInvX + gsItemPopupInvWidth, gsItemPopupInvY + gsItemPopupInvHeight);
-		}
-
 	}
 	// TAKE A LOOK AT THE VIDEO OBJECT SIZE ( ONE OF TWO SIZES ) AND CENTER!
-	ETRLEObject const& pTrav  = guiItemPopupBoxes->SubregionProperties(0);
-	UINT32 const usWidth = pTrav.usWidth;
-	UINT32 const usHeight = pTrav.usHeight;
+	const ETRLEObject &pTrav = guiItemPopupBoxes->SubregionProperties(0);
+	const UINT32 usWidth = pTrav.usWidth;
+	const UINT32 usHeight = pTrav.usHeight;
 
 	for (UINT32 cnt = 0; cnt < gubNumItemPopups; cnt++)
 	{
@@ -3953,7 +3936,7 @@ static void DeleteItemStackPopup(void)
 }
 
 
-void InitKeyRingPopup(SOLDIERTYPE* const pSoldier, INT16 const sInvX, INT16 const sInvY, INT16 const sInvWidth, INT16 const sInvHeight)
+void InitKeyRingPopup(SOLDIERTYPE *pSoldier, const INT16 sInvX, const INT16 sInvY, const INT16 sInvWidth, const INT16 sInvHeight)
 {
 	SGPRect aRect;
 	INT16 sKeyRingItemWidth = 0;
@@ -4346,7 +4329,7 @@ static void ItemPopupRegionCallback(MOUSE_REGION* pRegion, INT32 iReason)
 		if ( !InItemDescriptionBox( ) )
 		{
 			// RESTORE BACKGROUND
-			RestoreExternBackgroundRect( gsItemPopupInvX, gsItemPopupInvY, gsItemPopupInvWidth, gsItemPopupInvHeight );
+			RestoreExternBackgroundRect(gsItemPopupInvX, gsItemPopupInvY, gsItemPopupInvWidth, gsItemPopupInvHeight);
 			if ( guiCurrentItemDescriptionScreen == MAP_SCREEN )
 			{
 				MAPInternalInitItemDescriptionBox( gpItemPopupObject, (UINT8)uiItemPos, gpItemPopupSoldier );

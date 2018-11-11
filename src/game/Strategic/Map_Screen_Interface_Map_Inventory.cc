@@ -252,7 +252,7 @@ static void UpdateHelpTextForInvnentoryStashSlots(void)
 {
 	wchar_t pStr[ 512 ];
 	INT32 iCounter = 0;
-	INT32 iFirstSlotOnPage = ( iCurrentInventoryPoolPage * MAP_INVENTORY_POOL_SLOT_COUNT );
+	INT32 iFirstSlotOnPage = iCurrentInventoryPoolPage * MAP_INVENTORY_POOL_SLOT_COUNT;
 
 
 	// run through list of items in slots and update help text for mouse regions
