@@ -79,7 +79,7 @@ void InitRadarScreen()
 }
 
 
-void LoadRadarScreenBitmap(const char* const filename)
+void LoadRadarScreenBitmap(const char *filename)
 {
 	ClearOutRadarMapImage();
 
@@ -119,7 +119,6 @@ void MoveRadarScreen( )
 	gRadarRegion.RegionTopLeftY     = RADAR_WINDOW_TM_Y;
 	gRadarRegion.RegionBottomRightX = RADAR_WINDOW_X + RADAR_WINDOW_WIDTH;
 	gRadarRegion.RegionBottomRightY = RADAR_WINDOW_TM_Y + RADAR_WINDOW_HEIGHT;
-
 }
 
 

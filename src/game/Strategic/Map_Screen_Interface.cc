@@ -612,7 +612,8 @@ void RestoreBackgroundForDestinationGlowRegionList( void )
 	if( iOldDestinationLine != giDestHighLine )
 	{
 		// restore background
-		RestoreExternBackgroundRect( DEST_ETA_X, Y_START - 1, DEST_ETA_WIDTH, ( INT16 )( ( ( MAX_CHARACTER_COUNT + 1 ) * ( Y_SIZE + 2 ) ) + 1 ) );
+		RestoreExternBackgroundRect(DEST_ETA_X, Y_START - 1,
+			DEST_ETA_WIDTH, INT16(((MAX_CHARACTER_COUNT + 1) * (Y_SIZE + 2)) + 1));
 
 		// ARM: not good enough! must reblit the whole panel to erase glow chunk restored by help text disappearing!!!
 		fTeamPanelDirty = TRUE;
@@ -3367,10 +3368,10 @@ void DisplaySoldierUpdateBox( )
 		// blt the face and name
 
 		// get the face x and y
-		iFaceX = iX + ( iCounter % iNumberWide ) * TACT_UPDATE_MERC_FACE_X_WIDTH;
-		iFaceY = iY + ( iCounter / iNumberWide ) * TACT_UPDATE_MERC_FACE_X_HEIGHT;
+		iFaceX = iX + (iCounter % iNumberWide) * TACT_UPDATE_MERC_FACE_X_WIDTH;
+		iFaceY = iY + (iCounter / iNumberWide) * TACT_UPDATE_MERC_FACE_X_HEIGHT;
 
-		BltVideoObject( guiSAVEBUFFER , hBackGroundHandle, 20, iFaceX, iFaceY);
+		BltVideoObject(guiSAVEBUFFER, hBackGroundHandle, 20, iFaceX, iFaceY);
 	}
 
 	//loop through the mercs to be displayed
@@ -4336,7 +4337,7 @@ void HandleBlitOfSectorLocatorIcon( INT16 sSectorX, INT16 sSectorY, INT16 sSecto
 		}
 	}
 
-	RestoreExternBackgroundRect(  (INT16)(sScreenX + 1), (INT16)(sScreenY - 1),  MAP_GRID_X , MAP_GRID_Y );
+	RestoreExternBackgroundRect(sScreenX + 1, sScreenY - 1, MAP_GRID_X, MAP_GRID_Y);
 
 	// blit object to frame buffer
 	BltVideoObject(FRAME_BUFFER, guiSectorLocatorGraphicID, ubFrame, sScreenX, sScreenY);
