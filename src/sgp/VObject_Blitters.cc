@@ -237,23 +237,17 @@ Blt32_Texture(
 		while(w--) {
 			if(src[0]) { // no need to do anything if source is fully transparent
 				if(blendType == BLT32_BLEND_HACK254) {
-					if(zBufWrite) {
-						Assert(zDst != nullptr);
-						if(*reinterpret_cast<UINT8 *>(zDst) < zVal) { // look BLT32_BLEND_HACK254_BROKEN_Z_8BITS definition for explanation
-							*reinterpret_cast<UINT8 *>(zDst) = zVal;
-							if(src[3] == 0x02 && src[2] == 0x05 && src[1] == 0x04) { // shadow pixel
-								pixelShade(dst, src, 0x000000FF);
-							} else {
-								pixelCopy(dst, src);
-							}
+					if(src[3] == 0x02 && src[2] == 0x05 && src[1] == 0x04) { // shadow pixel
+						if(!zDst || *zDst < zVal - 1) {
+							if(zDst && zBufWrite)
+								*zDst = zVal - 2;
+							pixelShade(dst, src, 0x000000FF);
 						}
 					} else {
-						if(src[3] == 0x02 && src[2] == 0x05 && src[1] == 0x04) { // shadow pixel
-							if(!zDst || *zDst < zVal)
-								pixelShade(dst, src, 0x000000FF);
-						} else {
-							if(!zDst || *zDst <= zVal)
-								pixelCopy(dst, src);
+						if(!zDst || *zDst <= zVal) {
+							if(zDst && zBufWrite)
+								*zDst = zVal;
+							pixelCopy(dst, src);
 						}
 					}
 				} else if(blendType == BLT32_BLEND_HACK254_OBSCURED) {
@@ -820,17 +814,19 @@ Blt32BPPDataTo32BPPBufferTransShadowZClip
 	must be the same dimensions (including Pitch) as the destination. Pixels with a value of
 	254 are shaded instead of blitted.
 
-	WARNING: originally just lower 8bits were written to z-buf
-
 **********************************************************************************************/
 void Blt32BPPDataTo32BPPBufferTransShadowZClip(UINT32 *buf, const UINT32 bufPitch, UINT16 *zBuf, const UINT16 zVal, const HVOBJECT srcObj, const INT32 srcX, const INT32 srcY, const UINT16 srcIndex, SGPRect *clipRect, const UINT16 *palette)
 {
 	// maxrd2 - FIXME - uses palette from param
+
+// NOTE: originally just lower 8bits were written to z-buf... Changed since it seemed wrong.
+//       Blt32_Texture() would have to write z-buffer like this:
+//       if(*reinterpret_cast<UINT8 *>(zDst) < zVal) *reinterpret_cast<UINT8 *>(zDst) = zVal;
 	Blt32_Texture(buf, bufPitch, srcObj, srcX, srcY, srcIndex,
 		BLT32_Z_WRITE, zBuf, zVal,
 		BLT32_CLIP(clipRect),
 		BLT32_OUTLINE_NONE,
-		BLT32_BLEND_HACK254);
+		BLT32_BLEND_HACK254_BROKEN_Z_8BITS);
 }
 
 /**********************************************************************************************
