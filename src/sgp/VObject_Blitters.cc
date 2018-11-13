@@ -275,7 +275,7 @@ Blt32_Texture(
 					everyOtherPixel = !everyOtherPixel;
 #endif
 				} else if(blendType == BLT32_BLEND_OBSCURED) {
-					if(!zDst || *zDst < zVal) {
+					if(!zDst || *zDst <= zVal) {
 						if(zDst && zBufWrite)
 							*zDst = zVal;
 						pixelCopy(dst, src);
@@ -607,6 +607,12 @@ Blt32BPPDataTo32BPPBufferTransZPixelateObscured
 void Blt32BPPDataTo32BPPBufferTransZPixelateObscured(UINT32 *buf, const UINT32 bufPitch, UINT16 *zBuf, const UINT16 zVal, const HVOBJECT srcObj, const INT32 srcX, const INT32 srcY, const UINT16 srcIndex)
 {
 	// maxrd2 - FIXME - uses srcObj->CurrentShade();
+// NOTE: original code was handling z-buf like:
+//     if(*zBuf < zVal) // note < insytead of <=
+//         *zBuf = zVal;
+//     else if(!everyOtherPixel)
+//         continue;
+//     *dst = *src;
 	Blt32_Texture(buf, bufPitch, srcObj, srcX, srcY, srcIndex,
 		BLT32_Z_WRITE, zBuf, zVal,
 		BLT32_CLIP_NONE,
@@ -818,7 +824,6 @@ Blt32BPPDataTo32BPPBufferTransShadowZClip
 void Blt32BPPDataTo32BPPBufferTransShadowZClip(UINT32 *buf, const UINT32 bufPitch, UINT16 *zBuf, const UINT16 zVal, const HVOBJECT srcObj, const INT32 srcX, const INT32 srcY, const UINT16 srcIndex, SGPRect *clipRect, const UINT16 *palette)
 {
 	// maxrd2 - FIXME - uses palette from param
-
 // NOTE: originally just lower 8bits were written to z-buf... Changed since it seemed wrong.
 //       Blt32_Texture() would have to write z-buffer like this:
 //       if(*reinterpret_cast<UINT8 *>(zDst) < zVal) *reinterpret_cast<UINT8 *>(zDst) = zVal;
@@ -826,7 +831,7 @@ void Blt32BPPDataTo32BPPBufferTransShadowZClip(UINT32 *buf, const UINT32 bufPitc
 		BLT32_Z_WRITE, zBuf, zVal,
 		BLT32_CLIP(clipRect),
 		BLT32_OUTLINE_NONE,
-		BLT32_BLEND_HACK254_BROKEN_Z_8BITS);
+		BLT32_BLEND_HACK254);
 }
 
 /**********************************************************************************************
@@ -1301,8 +1306,11 @@ void Blt32BPPDataTo32BPPBufferOutlineZClip(UINT32 *buf, const UINT32 bufPitch, U
 void Blt32BPPDataTo32BPPBufferOutlineZNB(UINT32 *buf, const UINT32 bufPitch, UINT16 *zBuf, const UINT16 zVal, const HVOBJECT srcObj, const INT32 srcX, const INT32 srcY, const UINT16 srcIndex)
 {
 	// maxrd2 - FIXME - uses srcObj->CurrentShade();
+// NOTE: original code was checking zBuf with: *zBuf < zVal
+//       Changed it to how everything else is handling zBuf
+//       If needed it can be restored by passing "zVal - 1" to Blt32_Texture()
 	Blt32_Texture(buf, bufPitch, srcObj, srcX, srcY, srcIndex,
-		BLT32_Z_CHECK, zBuf, zVal - 1,
+		BLT32_Z_CHECK, zBuf, zVal,
 		BLT32_CLIP_NONE,
 		BLT32_OUTLINE_NONE,
 		BLT32_BLEND_COPY);
@@ -2082,8 +2090,11 @@ Blt32BPPDataTo32BPPBufferTransZIncClip
 void Blt32BPPDataTo32BPPBufferTransZIncClip(UINT32 *buf, const UINT32 bufPitch, UINT16 *zBuf, const UINT16 zVal, const HVOBJECT srcObj, const INT32 srcX, const INT32 srcY, const UINT16 srcIndex, const SGPRect *clipRect)
 {
 	// maxrd2 - FIXME - uses srcObj->CurrentShade();
+// NOTE: original code was checking zBuf with: *zBuf < zVal
+//       Changed it to how everything else is handling zBuf
+//       If needed it can be restored by passing "zVal - 1" to Blt32_Texture()
 	Blt32_Texture(buf, bufPitch, srcObj, srcX, srcY, srcIndex,
-		BLT32_Z_WRITE, zBuf, zVal - 1,
+		BLT32_Z_WRITE, zBuf, zVal,
 		BLT32_CLIP(clipRect),
 		BLT32_OUTLINE_NONE,
 		BLT32_BLEND_COPY,
