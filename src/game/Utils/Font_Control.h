@@ -96,17 +96,4 @@ extern SGPFont gpHugeFont;
 void InitializeFonts(void);
 void ShutdownFonts(void);
 
-enum FontShade
-{
-	FONT_SHADE_GREY_165 = 0,
-	FONT_SHADE_BLUE     = 1,
-	FONT_SHADE_GREEN    = 2,
-	FONT_SHADE_YELLOW   = 3,
-	FONT_SHADE_NEUTRAL  = 4,
-	FONT_SHADE_WHITE    = 5,
-	FONT_SHADE_RED      = 6
-};
-
-void SetFontShade(SGPFont, FontShade);
-
 #endif
