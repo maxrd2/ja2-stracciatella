@@ -117,7 +117,8 @@ void SGPVObject::CurrentShade(size_t const idx)
 {
 	if (idx >= lengthof(pShades) || !pShades[idx])
 	{
-		throw std::logic_error("Tried to set invalid video object shade");
+//		throw std::logic_error("Tried to set invalid video object shade");
+		return;
 	}
 	current_shade_ = pShades[idx];
 }

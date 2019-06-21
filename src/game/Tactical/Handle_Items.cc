@@ -1728,8 +1728,8 @@ static BOOLEAN LookForHiddenItems(INT16 const sGridNo, INT8 const ubLevel)
 
 INT8 GetZLevelOfItemPoolGivenStructure(INT16 const sGridNo, UINT8 const ubLevel, STRUCTURE const* const pStructure)
 {
-	if (!pStructure)
-		return 0;
+//	if (!pStructure)
+//		return 0;
 	ITEM_POOL const* const ip = GetItemPool(sGridNo, ubLevel);
 	return GetLargestZLevelOfItemPool(ip);
 }

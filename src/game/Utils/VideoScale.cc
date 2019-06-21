@@ -20,6 +20,14 @@ SGPImage * ScaleImage(SGPImage *image, DOUBLE factor)
 {
 	AutoSGPImage scaled(new SGPImage(std::ceil(factor * image->usWidth), std::ceil(factor * image->usHeight), 32));
 
+	if(image->fFlags & IMAGE_PALETTE) {
+		SGPPaletteEntry *palette = scaled->pPalette.Allocate(256);
+		// FIXME: maxrd2 we don't care about palette actually... drop this block
+		memcpy(palette, image->pPalette, sizeof(SGPPaletteEntry) * 256);
+
+		scaled->fFlags |= IMAGE_PALETTE;
+	}
+
 	if(image->fFlags & IMAGE_BITMAPDATA) {
 		scaled->fFlags |= IMAGE_BITMAPDATA;
 
