@@ -611,8 +611,8 @@ static void RenderTiles(RenderTilesFlags const uiFlags, INT32 const iStartPointX
 									usImageIndex     = a.sCurrentFrame;
 									uiAniTileFlags   = a.uiFlags;
 
-									float dOffsetX;
-									float dOffsetY;
+									INT16 dOffsetX;
+									INT16 dOffsetY;
 									// Position corpse based on it's float position
 									if (uiLevelNodeFlags & LEVELNODE_ROTTINGCORPSE)
 									{
@@ -635,9 +635,9 @@ static void RenderTiles(RenderTilesFlags const uiFlags, INT32 const iStartPointX
 									}
 
 									// Calculate guy's position
-									float dTempX_S;
-									float dTempY_S;
-									FloatFromCellToScreenCoordinates(dOffsetX, dOffsetY, &dTempX_S, &dTempY_S);
+									INT16 dTempX_S;
+									INT16 dTempY_S;
+									FromCellToScreenCoordinates(dOffsetX, dOffsetY, &dTempX_S, &dTempY_S);
 
 									sXPos = g_ui.m_tacticalMapCenterX + (INT16)dTempX_S;
 									sYPos = g_ui.m_tacticalMapCenterY + (INT16)dTempY_S - sTileHeight;
@@ -683,15 +683,15 @@ static void RenderTiles(RenderTilesFlags const uiFlags, INT32 const iStartPointX
 								//ADJUST FOR ABSOLUTE POSITIONING
 								if (uiLevelNodeFlags & LEVELNODE_USEABSOLUTEPOS)
 								{
-									float dOffsetX = pNode->sRelativeX - gsRenderCenterX;
-									float dOffsetY = pNode->sRelativeY - gsRenderCenterY;
+									INT16 dOffsetX = pNode->sRelativeX - gsRenderCenterX;
+									INT16 dOffsetY = pNode->sRelativeY - gsRenderCenterY;
 
 									// OK, DONT'T ASK... CONVERSION TO PROPER Y NEEDS THIS...
 									dOffsetX -= CELL_Y_SIZE;
 
-									float dTempX_S;
-									float dTempY_S;
-									FloatFromCellToScreenCoordinates(dOffsetX, dOffsetY, &dTempX_S, &dTempY_S);
+									INT16 dTempX_S;
+									INT16 dTempY_S;
+									FromCellToScreenCoordinates(dOffsetX, dOffsetY, &dTempX_S, &dTempY_S);
 
 									sXPos = g_ui.m_tacticalMapCenterX + (INT16)dTempX_S;
 									sYPos = g_ui.m_tacticalMapCenterY + (INT16)dTempY_S;
@@ -986,13 +986,13 @@ zlevel_topmost:
 								pShadeTable = s.pShades[ubShadeLevel];
 
 								// Position guy based on guy's position
-								float const dOffsetX = s.dXPos - gsRenderCenterX;
-								float const dOffsetY = s.dYPos - gsRenderCenterY;
+								INT16 const dOffsetX = s.dXPos - gsRenderCenterX;
+								INT16 const dOffsetY = s.dYPos - gsRenderCenterY;
 
 								// Calculate guy's position
-								float dTempX_S;
-								float dTempY_S;
-								FloatFromCellToScreenCoordinates(dOffsetX, dOffsetY, &dTempX_S, &dTempY_S);
+								INT16 dTempX_S;
+								INT16 dTempY_S;
+								FromCellToScreenCoordinates(dOffsetX, dOffsetY, &dTempX_S, &dTempY_S);
 
 								sXPos = g_ui.m_tacticalMapCenterX + (INT16)dTempX_S;
 								sYPos = g_ui.m_tacticalMapCenterY + (INT16)dTempY_S - sTileHeight;
