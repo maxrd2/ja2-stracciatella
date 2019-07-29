@@ -2242,10 +2242,6 @@ void RenderTopmostMultiPurposeLocator( )
 	sXPos = ( g_ui.m_tacticalMapCenterX ) + (INT16)dTempX_S;
 	sYPos = ( g_ui.m_tacticalMapCenterY ) + (INT16)dTempY_S - gpWorldLevelData[ gsMultiPurposeLocatorGridNo ].sHeight;
 
-	// Adjust for offset position on screen
-	sXPos -= gsRenderWorldOffsetX;
-	sYPos -= gsRenderWorldOffsetY;
-
 	// Adjust for render height
 	sYPos += gsRenderHeight;
 
