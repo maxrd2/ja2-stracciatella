@@ -60,8 +60,8 @@ void UILayout::recalculatePositions()
 	m_scaledInterfaceWidth  = m_stdScreenScale * MIN_INTERFACE_WIDTH;
 	m_scaledInterfaceHeight = m_stdScreenScale * MIN_INTERFACE_HEIGHT;
 
-	// FIXME: maxrd2: it should match m_stdScreenScale for now since resources are scaled for that
-	m_tacticalScreenScale = m_stdScreenScale; //(m_stdScreenScale + 1.) / 2.;
+	m_tacticalScreenScale = __min(1.2, m_stdScreenScale);
+	m_cursorScreenScale = 1.0;
 
 	m_stdScreenOffsetX = (m_screenWidth  - m_stdScreenScale * MIN_INTERFACE_WIDTH)  / 2;
 	m_stdScreenOffsetY = (m_screenHeight - m_stdScreenScale * MIN_INTERFACE_HEIGHT) / 2;

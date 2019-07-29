@@ -32,7 +32,7 @@ try
 {
 	// Add tile surface
 	AutoSGPImage img(CreateImage(cFilename, IMAGE_ALLDATA | IMAGE_HACK254));
-	AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale));
+	AutoSGPImage hImage(ScaleImage(img, g_ui.m_tacticalScreenScale));
 	AutoSGPVObject hVObject(AddVideoObjectFromHImage(hImage));
 
 	// Load structure data, if any.

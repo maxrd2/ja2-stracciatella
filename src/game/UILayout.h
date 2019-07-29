@@ -116,6 +116,7 @@ public:
 	UINT16                m_scaledInterfaceHeight;
 
 	DOUBLE                m_tacticalScreenScale;
+	DOUBLE                m_cursorScreenScale;
 
 	/** Constructor.
 	 * @param screenWidth Screen width
