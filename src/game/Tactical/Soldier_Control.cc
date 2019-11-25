@@ -5052,17 +5052,17 @@ void LoadPaletteData()
 
 void SetPaletteReplacement(SGPPaletteEntry* const p8BPPPalette, PaletteRepID aPalRep)
 {
-	UINT32 cnt2;
-	UINT8  ubType;
+	SetPaletteReplacement(p8BPPPalette, GetPaletteRepIndexFromID(aPalRep));
+}
 
-	const UINT8 ubPalIndex = GetPaletteRepIndexFromID(aPalRep);
-
+void  SetPaletteReplacement(SGPPaletteEntry* const p8BPPPalette, const UINT8 ubPalIndex)
+{
 	// Get range type
-	ubType = gpPalRep[ ubPalIndex ].ubType;
+	UINT8 ubType = gpPalRep[ ubPalIndex ].ubType;
 
-	for ( cnt2 = gpPaletteSubRanges[ ubType ].ubStart; cnt2 <= gpPaletteSubRanges[ ubType ].ubEnd; cnt2++ )
-	{
+	for (UINT32 cnt2 = gpPaletteSubRanges[ubType].ubStart; cnt2 <= gpPaletteSubRanges[ubType].ubEnd; cnt2++) {
 		p8BPPPalette[cnt2] = gpPalRep[ubPalIndex].rgb[cnt2 - gpPaletteSubRanges[ubType].ubStart];
+		p8BPPPalette[cnt2].a = 255;
 	}
 }
 
