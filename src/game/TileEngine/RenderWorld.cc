@@ -1546,9 +1546,7 @@ zlevel_topmost:
 									}
 									else
 									{
-										Blt32BPPDataTo32BPPBufferTransparent(
-													reinterpret_cast<UINT32 *>(pDestBuf), // FIXME: maxrd2
-													uiDestPitchBYTES, hVObject, sXPos, sYPos, usImageIndex);
+										Blt32BPPDataTo32BPPBufferTransparent(pDestBuf, uiDestPitchBYTES, hVObject, sXPos, sYPos, usImageIndex);
 									}
 								}
 							}
