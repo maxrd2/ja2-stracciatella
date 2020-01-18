@@ -10,7 +10,6 @@
 #include "SGP.h"
 #include "Logger.h"
 #include "Local.h"
-#include "VideoScale.h"
 #include "UILayout.h"
 #include "VObject.h"
 
@@ -207,10 +206,10 @@ SGPVSurfaceAuto* AddVideoSurface(UINT16 Width, UINT16 Height, UINT8 BitDepth)
 }
 
 
-SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* const Filename)
+SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char *Filename, ScaleCallback *callback)
 {
 	AutoSGPImage imgOrig(CreateImage(Filename, IMAGE_ALLIMAGEDATA));
-	AutoSGPImage img(ScaleImage(imgOrig, g_ui.m_stdScreenScale));
+	AutoSGPImage img(ScaleImage(imgOrig, g_ui.m_stdScreenScale, true, callback));
 
 	SGPVSurfaceAuto* const vs = new SGPVSurfaceAuto(img->usWidth, img->usHeight, img->ubBitDepth);
 

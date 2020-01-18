@@ -5,6 +5,7 @@
 #include "AutoPtr.h"
 #include "Buffer.h"
 #include "Types.h"
+#include "VideoScale.h"
 #include <SDL.h>
 
 
@@ -145,7 +146,7 @@ class SGPVSurfaceAuto : public SGPVSurface
 
 
 SGPVSurfaceAuto* AddVideoSurface(UINT16 Width, UINT16 Height, UINT8 BitDepth);
-SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* Filename);
+SGPVSurfaceAuto* AddVideoSurfaceFromFile(const char* Filename, ScaleCallback *callback=nullptr);
 
 // Creates and adds a video Surface to list
 #ifdef SGP_VIDEO_DEBUGGING

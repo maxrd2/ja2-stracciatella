@@ -278,10 +278,10 @@ SGPVObject* AddStandardVideoObjectFromFile(const char *ImageFile)
 	return AddScaledVideoObjectFromFile(ImageFile);
 }
 
-SGPVObject* AddScaledVideoObjectFromFile(const char *ImageFile)
+SGPVObject* AddScaledVideoObjectFromFile(const char *ImageFile, ScaleCallback *callback)
 {
 	AutoSGPImage img(CreateImage(ImageFile, IMAGE_ALLIMAGEDATA));
-	AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale));
+	AutoSGPImage hImage(ScaleImage(img, g_ui.m_stdScreenScale, true, callback));
 	return AddStandardVideoObjectFromHImage(hImage);
 }
 

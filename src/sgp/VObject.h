@@ -4,6 +4,7 @@
 #include "AutoPtr.h"
 #include "Buffer.h"
 #include "Types.h"
+#include "VideoScale.h"
 
 
 // Defines for HVOBJECT limits
@@ -114,7 +115,7 @@ extern UINT32 guiVObjectSize;
 #else
 	SGPVObject* AddStandardVideoObjectFromHImage(SGPImage *img);
 	SGPVObject* AddStandardVideoObjectFromFile(const char *ImageFile);
-	SGPVObject* AddScaledVideoObjectFromFile(const char *ImageFile);
+	SGPVObject* AddScaledVideoObjectFromFile(const char *ImageFile, ScaleCallback *callback=nullptr);
 	SGPVObject* AddScaledOutlineVideoObjectFromFile(const char *ImageFile);
 	SGPVObject* AddScaledAlphaVideoObjectFromFile(const char *ImageFile);
 	#define AddVideoObjectFromHImage(a) AddStandardVideoObjectFromHImage(a)
